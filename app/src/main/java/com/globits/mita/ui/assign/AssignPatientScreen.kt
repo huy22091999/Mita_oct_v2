@@ -2,8 +2,6 @@ package com.globits.mita.ui.assign
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -20,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
-import com.globits.mita.ui.patients.PatientInfo
+import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.patients.SetLayoutDiagnostic
 import com.globits.mita.ui.patients.SetLayoutItemPatient
 import com.globits.mita.ui.patients.SetUpToolbarLayout
@@ -36,7 +34,7 @@ fun DefaultPreviewPatientInfoAssign() {
 }
 
 @Composable
-fun SetLayoutPatientInfoAssign(onBackStack:()->Unit) {
+fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit) {
     MaterialTheme {
         Column(
             Modifier
@@ -57,7 +55,7 @@ fun SetLayoutPatientInfoAssign(onBackStack:()->Unit) {
                             .height(92.dp)
                     ) {}
                     Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                        SetLayoutItemPatient(patient = PatientInfo()) {
+                        SetLayoutItemPatient(patient = UserDto("", "", "", 0)) {
                         }
                     }
                 }
@@ -164,7 +162,7 @@ fun SetLayoutListAssign() {
 //            }
 //        }
         Column(Modifier.padding(top = 16.dp)) {
-            for (item in specials){
+            for (item in specials) {
                 SetLayoutItemSpecial(item)
             }
         }
@@ -214,8 +212,7 @@ fun SetLayoutListAssign() {
             Button(
                 onClick = { /*TODO*/ }, modifier = Modifier
                     .padding(start = 6.dp, end = 6.dp)
-                    .fillMaxWidth(.5f)
-                    , colors =
+                    .fillMaxWidth(.5f), colors =
                 ButtonDefaults.buttonColors(PRIMARY_COLOR),
                 shape = RoundedCornerShape(8.dp)
 

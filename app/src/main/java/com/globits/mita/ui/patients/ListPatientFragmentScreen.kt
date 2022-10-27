@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
+import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.home.SetLayoutSearch
+import com.globits.mita.ui.nursing.SetLayoutListPatientFragment
 import com.globits.mita.ui.theme.*
 
 
@@ -35,18 +37,6 @@ fun DefaultPreviewListPatient() {
 
 }
 
-@Composable
-fun SetLayoutListPatientFragment(onClickListener: (PatientInfo) -> Unit, onBackStack: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .background(Color.White)
-    ) {
-        SetUpToolbarLayoutLight(onBackStack = onBackStack)
-        SetHeaderListPatient()
-        SetBodyListPatient(onClickListener)
-    }
-}
 
 @Composable
 fun SetUpToolbarLayoutLight(onBackStack: () -> Unit) {
@@ -139,19 +129,19 @@ fun SetLayoutRadioButton(title: String, valueState: String, onClick: (String) ->
 @Composable
 fun SetBodyListPatient(onClickListener: (PatientInfo) -> Unit) {
     val listPatientInfo by remember {
-        mutableStateOf(mutableListOf<PatientInfo>(PatientInfo(), PatientInfo()))
+        mutableStateOf(listOf<UserDto>())
     }
     LazyColumn(content = {
         items(listPatientInfo) { item ->
             SetLayoutItemPatient(patient = item) {
-                onClickListener(item)
+                onClickListener(PatientInfo())
             }
         }
     })
 }
 
 @Composable
-fun SetLayoutItemPatient(patient: PatientInfo, onClickPatient: () -> Unit) {
+fun SetLayoutItemPatient(patient: UserDto, onClickPatient: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -164,7 +154,7 @@ fun SetLayoutItemPatient(patient: PatientInfo, onClickPatient: () -> Unit) {
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            SetLayoutPatientInfoItem()
+            SetLayoutPatientInfoItem(patient)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

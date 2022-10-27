@@ -253,7 +253,7 @@ abstract class MitaBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasScre
         fm: FragmentManager,
         fromToolbar: Boolean
     ): Boolean {
-        val reverseOrder = fm.fragments.filterIsInstance<MitaBaseFragment<*>>().reversed()
+        val reverseOrder = fm.fragments.filterIsInstance<MitaBaseFragment>().reversed()
         for (f in reverseOrder) {
             val handledByChildFragments =
                 recursivelyDispatchOnBackPressed(f.childFragmentManager, fromToolbar)

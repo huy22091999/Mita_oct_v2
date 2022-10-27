@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.globits.mita.R
+import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.theme.*
 import java.util.*
 
@@ -34,11 +35,13 @@ import java.util.*
 @Preview
 @Composable
 fun DefaultPreviewListPatientAssign() {
-    SetLayoutListPatientFragmentAssign(onClickListener = {}, onBackStack = {})
+//    SetLayoutListPatientFragmentAssign(onClickListener = {}, onBackStack = {}, listUser = mutableStateOf(
+//        mutableListOf<UserDto>())
 }
 
 @Composable
 fun SetLayoutListPatientFragmentAssign(
+    listUser: androidx.compose.runtime.State<List<UserDto>>,
     onClickListener: (PatientInfo) -> Unit,
     onBackStack: () -> Unit
 ) {
@@ -49,27 +52,30 @@ fun SetLayoutListPatientFragmentAssign(
     ) {
         SetUpToolbarLayoutLight(onBackStack = onBackStack)
         SetHeaderListPatient()
-        SetBodyListPatientAssign(onClickListener)
+        SetBodyListPatientAssign(listUser, onClickListener)
     }
 }
 
 
 @Composable
-fun SetBodyListPatientAssign(onClickListener: (PatientInfo) -> Unit) {
+fun SetBodyListPatientAssign(
+    listUser: androidx.compose.runtime.State<List<UserDto>>,
+    onClickListener: (PatientInfo) -> Unit
+) {
     val listPatientInfo by remember {
         mutableStateOf(mutableListOf<PatientInfo>(PatientInfo(), PatientInfo()))
     }
     LazyColumn(content = {
-        items(listPatientInfo) { item ->
+        items(listUser.value) { item ->
             SetLayoutItemPatientAssign(patient = item) {
-                onClickListener(item)
+                onClickListener(PatientInfo())
             }
         }
     })
 }
 
 @Composable
-fun SetLayoutItemPatientAssign(patient: PatientInfo, onClickPatient: () -> Unit) {
+fun SetLayoutItemPatientAssign(patient: UserDto, onClickPatient: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,7 +88,7 @@ fun SetLayoutItemPatientAssign(patient: PatientInfo, onClickPatient: () -> Unit)
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            SetLayoutPatientInfoItem()
+            SetLayoutPatientInfoItem(patient)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,7 +117,7 @@ fun SetLayoutItemPatientAssign(patient: PatientInfo, onClickPatient: () -> Unit)
 }
 
 @Composable
-fun SetLayoutPatientInfoItem() {
+fun SetLayoutPatientInfoItem(patient: UserDto) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,7 +145,7 @@ fun SetLayoutPatientInfoItem() {
 
             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
                 val (name, btn) = createRefs()
-                Text(text = "Nguyễn văn Huy", modifier = Modifier
+                Text(text = patient.name, modifier = Modifier
                     .constrainAs(name) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)

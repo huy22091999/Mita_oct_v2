@@ -34,13 +34,13 @@ class LoginActivity : MitaBaseActivity<ActivityLoginBinding>(), SecurityViewMode
             handleViewEvent(it)
         }
         viewModel.subscribe(this){
-//            if(it.isLoading())
-//            {
-//                views.waitingView.waitingView.visibility= View.VISIBLE
-//            }
-//            else{
-//                views.waitingView.waitingView.visibility= View.GONE
-//            }
+            if(it.isLoading())
+            {
+                views.waitingView.waitingView.visibility= View.VISIBLE
+            }
+            else{
+                views.waitingView.waitingView.visibility= View.GONE
+            }
         }
     }
 
@@ -54,9 +54,6 @@ class LoginActivity : MitaBaseActivity<ActivityLoginBinding>(), SecurityViewMode
                             finish()
                         }
                         is Fail -> {
-//                            startActivity(Intent(this, MainActivity::class.java))
-//                            finish()
-                            SessionManager(applicationContext).saveAuthToken("")
                             supportFragmentManager.commit {
                                 replace<LoginFragment>(R.id.frame_layout)
                             }

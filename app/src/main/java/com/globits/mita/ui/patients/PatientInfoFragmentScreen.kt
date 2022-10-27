@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
+import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.theme.*
 import java.util.*
 
@@ -51,7 +52,7 @@ fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit) {
                         .height(92.dp)
                 ) {}
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                    SetLayoutItemPatient(patient = PatientInfo()) {
+                    SetLayoutItemPatient(patient = UserDto("", "", "", 0)) {
                     }
                 }
             }
@@ -171,7 +172,7 @@ fun SetLayoutPatientInfo(isNursing: Boolean, onPatientClick: () -> Unit, onBackS
                         .height(92.dp)
                 ) {}
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                    SetLayoutItemPatient(patient = PatientInfo()) {
+                    SetLayoutItemPatient(patient = UserDto("", "", "", 0)) {
                     }
                 }
             }
@@ -283,7 +284,7 @@ fun SetUpToolbarLayout(onBackStack: () -> Unit) {
         },
         actions = {
             IconButton(
-                onClick = {  }, Modifier
+                onClick = { }, Modifier
                     .background(
                         shape = RoundedCornerShape(12.dp),
                         color = BACKGROUND_TOOLBAR
@@ -303,7 +304,7 @@ fun SetUpToolbarLayout(onBackStack: () -> Unit) {
         },
         navigationIcon = {
             IconButton(
-                onClick = {onBackStack() }, Modifier
+                onClick = { onBackStack() }, Modifier
                     .background(
                         shape = RoundedCornerShape(12.dp),
                         color = BACKGROUND_TOOLBAR

@@ -23,6 +23,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.CallSuper
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
@@ -34,9 +36,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-abstract class MitaBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScreenInjector {
+abstract class MitaBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
-    protected val qltsBaseActivity: MitaBaseActivity<*> by lazy {
+    protected val mitaBaseActivity: MitaBaseActivity<*> by lazy {
         activity as MitaBaseActivity<*>
     }
 
@@ -65,25 +67,11 @@ abstract class MitaBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScree
         get() = ViewModelProvider(this, viewModelFactory)
 
     /* ==========================================================================================
-     * Views
-     * ========================================================================================== */
-
-    private var _binding: VB? = null
-
-    // This property is only valid between onCreateView and onDestroyView.
-    protected val views: VB
-        get() = _binding!!
-
-    /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
 
     override fun onAttach(context: Context) {
         screenComponent = DaggerMitaComponent.factory().create(context)
-//        navigator = screenComponent.navigator()
-//        errorFormatter = screenComponent.errorFormatter()
-//        unrecognizedCertificateDialog = screenComponent.unrecognizedCertificateDialog()
-        //viewModelFactory = screenComponent.viewModelFactory()
         childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         super.onAttach(context)
     }
@@ -102,11 +90,20 @@ abstract class MitaBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScree
         savedInstanceState: Bundle?
     ): View {
         Timber.i("onCreateView Fragment ${javaClass.simpleName}")
-        _binding = getBinding(inflater, container)
-        return views.root
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                SetLayout()
+            }
+        }
+
+
     }
 
-    abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?): VB
+    @Composable
+    abstract fun SetLayout()
+
+    //abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     @CallSuper
     override fun onResume() {
@@ -138,7 +135,6 @@ abstract class MitaBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScree
     override fun onDestroyView() {
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
         uiDisposables.clear()
-        _binding = null
         super.onDestroyView()
     }
 

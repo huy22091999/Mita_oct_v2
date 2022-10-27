@@ -4,7 +4,7 @@
     <style name="AppTheme.Launcher" parent="AppTheme.Launcher.Base" />
 
     <style name="AppTheme.Launcher.Base" parent="Theme.MaterialComponents.Light.NoActionBar">
-<!--        <item name="android:windowBackground">@drawable/img_icon_splash_mita</item>-->
+        <item name="android:windowBackground">@drawable/img_icon_splash_mita</item>
         <item name="android:windowFullscreen">true</item>
         <item name="colorPrimaryDark">#15171B</item>
     </style>
@@ -97,4 +97,10 @@
         <item name="android:letterSpacing">0.02</item>
 
     </style>
+    <style name="TextBold">
+        <item name="android:fontFamily">@font/nunito_sans_semi_bold</item>
+        <item name="android:textColor">#F3000000</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

@@ -1,17 +1,62 @@
 package com.globits.mita.ui.security
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
+import com.globits.mita.R
 import com.globits.mita.core.MitaBaseFragment
-import com.globits.mita.databinding.FragmentSplassBinding
+import com.globits.mita.ui.theme.PRIMARY_COLOR
+import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
 import javax.inject.Inject
 
-class SplashFragment @Inject constructor() : MitaBaseFragment<FragmentSplassBinding>() {
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentSplassBinding {
-        return FragmentSplassBinding.inflate(inflater,container,false)
+class SplashFragment @Inject constructor() : MitaBaseFragment() {
+    @Composable
+    override fun SetLayout() {
+       MaterialTheme {
+           SetSplashScreen()
+       }
     }
 
+}
+
+@Preview
+@Composable
+fun DefaulPreview() {
+    SetSplashScreen()
+}
+@Composable
+fun SetSplashScreen(){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = PRIMARY_COLOR),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = Modifier.size(128.sdp),
+            painter = painterResource(id = R.drawable.img_icon_mita_white),
+            contentDescription = ""
+        )
+        Text(
+            text = "Mita",
+            color = Color.White,
+            fontSize = 50.ssp,
+            fontFamily = FontFamily(Font(R.font.nunito_sans_semi_bold))
+        )
+    }
 }

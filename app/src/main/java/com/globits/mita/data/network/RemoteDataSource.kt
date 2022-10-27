@@ -69,8 +69,7 @@ class RemoteDataSource() {
     }
 
     fun <Api> buildApiAuth(
-        api: Class<Api>,
-        context: Context
+        api: Class<Api>
     ): Api {
         val gson = GsonBuilder()
             .registerTypeAdapter(Date::class.java, UnitEpochDateTypeAdapter())

@@ -148,7 +148,7 @@
                         android:backgroundTint="@color/primary_color"
                         android:text="@string/auth_login"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/_16sdp"
                         app:cornerRadius="10dp"
                         tools:ignore="RelativeOverlap" />
 

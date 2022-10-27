@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import com.globits.mita.MitaApplication
 import com.globits.mita.ui.MainActivity
+import com.globits.mita.ui.assign.AssignActivity
 import com.globits.mita.ui.security.LoginActivity
 
 import dagger.BindsInstance
@@ -21,6 +22,7 @@ interface MitaComponent {
     fun inject(xCareApplication: MitaApplication)
     fun inject(mainActivity: MainActivity)
     fun inject(loginActivity: LoginActivity)
+    fun inject(assignActivity: AssignActivity)
     fun fragmentFactory(): FragmentFactory
     fun viewModelFactory(): ViewModelProvider.Factory
 
