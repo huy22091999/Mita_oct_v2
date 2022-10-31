@@ -127,14 +127,20 @@ fun SetLayoutRadioButton(title: String, valueState: String, onClick: (String) ->
 
 
 @Composable
-fun SetBodyListPatient(onClickListener: (PatientInfo) -> Unit) {
+fun SetBodyListPatient(onClickListener: (UserDto) -> Unit) {
     val listPatientInfo by remember {
-        mutableStateOf(listOf<UserDto>())
+        mutableStateOf(
+            listOf<UserDto>(
+                UserDto(name = "Nguyễn văn Huy"),
+                UserDto(name = "Nguyễn văn Huy"),
+                UserDto(name = "Nguyễn văn Huy"),
+            )
+        )
     }
     LazyColumn(content = {
         items(listPatientInfo) { item ->
             SetLayoutItemPatient(patient = item) {
-                onClickListener(PatientInfo())
+                onClickListener(item)
             }
         }
     })

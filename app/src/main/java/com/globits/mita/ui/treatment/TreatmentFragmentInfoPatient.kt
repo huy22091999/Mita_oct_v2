@@ -15,7 +15,7 @@ class TreatmentFragmentInfoPatient : MitaBaseFragment() {
     override fun SetLayout() {
         SetLayoutPatientInfo(
             false,
-            onBackStack = { (activity as TreatmentActivity).addFragmentPatient() },
+            onBackStack = { (activity as TreatmentActivity).removeBackStack() },
             onPatientClick = { (activity as TreatmentActivity).addFragmentPatient() })
     }
 

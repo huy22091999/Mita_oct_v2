@@ -1,21 +1,18 @@
 package com.globits.mita.ui.assign
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import com.globits.mita.core.MitaBaseFragment
-import com.globits.mita.databinding.FragmentAssignBinding
-import com.globits.mita.ui.patients.SetLayoutPatientInfoPacs
+import com.globits.mita.data.network.UserDto
 
 
 class AssignInfoFragment : MitaBaseFragment() {
     @Composable
     override fun SetLayout() {
-        SetLayoutPatientInfoAssign(){
+        SetLayoutPatientInfoAssign(onBackStack = {
             (activity as AssignActivity).removeBackStack()
-        }
+        }, UserDto(name = "Nguyễn văn Huy"))
     }
 
 

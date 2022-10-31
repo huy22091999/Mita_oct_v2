@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.patients.*
 
 @Preview
@@ -18,7 +19,7 @@ fun DefaultPreviewNursingPatient() {
 
 }
 @Composable
-fun SetLayoutListPatientFragment(onClickListener: (PatientInfo) -> Unit, onBackStack: () -> Unit) {
+fun SetLayoutListPatientFragment(onClickListener: (UserDto) -> Unit, onBackStack: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(16.dp)

@@ -19,7 +19,13 @@ import javax.inject.Inject
 class AssignFragment @Inject constructor() : MitaBaseFragment() {
     val viewModel: AssignViewModel by activityViewModel()
 
-    var _listUser = mutableStateOf<List<UserDto>>(mutableListOf())
+    var _listUser = mutableStateOf<List<UserDto>>(
+        mutableListOf(
+            UserDto(name = "Nguyễn văn Huy"),
+            UserDto(name = "Nguyễn văn Huy"),
+            UserDto(name = "Nguyễn văn Huy"),
+        )
+    )
     private val listUser: State<List<UserDto>> = _listUser
 
     @Composable
@@ -29,7 +35,7 @@ class AssignFragment @Inject constructor() : MitaBaseFragment() {
             (activity as AssignActivity).addFragmentInfoPatient()
         }, onBackStack = {
             (activity as AssignActivity).finish()
-        }, listUser =listUser)
+        }, listUser = listUser)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,7 +51,7 @@ class AssignFragment @Inject constructor() : MitaBaseFragment() {
             is Success -> {
                 it.asyncUsers.invoke()?.data.let {
                     if (it != null) {
-                        _listUser.value=it
+                        //_listUser.value=it
                     }
                 }
             }

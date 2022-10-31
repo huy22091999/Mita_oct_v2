@@ -172,7 +172,7 @@ fun SetLayoutPatientInfo(isNursing: Boolean, onPatientClick: () -> Unit, onBackS
                         .height(92.dp)
                 ) {}
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                    SetLayoutItemPatient(patient = UserDto("", "", "", 0)) {
+                    SetLayoutItemPatient(patient = UserDto(name = "Nguyễn văn Huy")) {
                     }
                 }
             }

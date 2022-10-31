@@ -30,11 +30,11 @@ import com.globits.mita.utils.formatNumber
 @Preview
 @Composable
 fun DefaultPreviewPatientInfoAssign() {
-    SetLayoutPatientInfoAssign(onBackStack = {})
+    SetLayoutPatientInfoAssign(onBackStack = {},UserDto(name = "Nguyễn văn Huy"))
 }
 
 @Composable
-fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit) {
+fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit,userDto: UserDto) {
     MaterialTheme {
         Column(
             Modifier
@@ -55,7 +55,7 @@ fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit) {
                             .height(92.dp)
                     ) {}
                     Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                        SetLayoutItemPatient(patient = UserDto("", "", "", 0)) {
+                        SetLayoutItemPatient(patient =userDto) {
                         }
                     }
                 }

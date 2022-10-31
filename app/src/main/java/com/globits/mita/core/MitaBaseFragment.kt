@@ -48,10 +48,6 @@ abstract class MitaBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     private lateinit var screenComponent: MitaComponent
 
-//    protected lateinit var navigator: Navigator
-//    protected lateinit var errorFormatter: ErrorFormatter
-//    protected lateinit var unrecognizedCertificateDialog: UnrecognizedCertificateDialog
-
     private var progress: ProgressDialog? = null
 
     /* ==========================================================================================

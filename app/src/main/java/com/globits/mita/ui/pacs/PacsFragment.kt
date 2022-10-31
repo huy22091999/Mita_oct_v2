@@ -9,8 +9,16 @@ import com.globits.mita.ui.patients.SetLayoutListPatientFragmentAssign
 
 
 class PacsFragment : MitaBaseFragment() {
-    var _listUser = mutableStateOf<List<UserDto>>(mutableListOf())
+    var _listUser = mutableStateOf<List<UserDto>>(
+        mutableListOf(
+            UserDto(name = "Nguyễn văn Huy"),
+            UserDto(name = "Nguyễn văn Huy"),
+            UserDto(name = "Nguyễn văn Huy"),
+            UserDto(name = "Nguyễn văn Huy")
+        )
+    )
     private val listUser: State<List<UserDto>> = _listUser
+
     @Composable
     override fun SetLayout() {
         SetLayoutListPatientFragmentAssign(onBackStack = {

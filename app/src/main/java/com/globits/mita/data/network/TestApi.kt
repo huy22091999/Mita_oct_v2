@@ -3,7 +3,6 @@ package com.globits.mita.data.network
 import com.globits.mita.data.model.Responsive
 import io.reactivex.Observable
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
 
 
@@ -18,8 +17,8 @@ data class SearchDto(
 )
 
 data class UserDto(
-    val id: String,
-    val name: String,
-    val code: String,
-    val age: Int
+    val id: String? = null,
+    val name: String? = null,
+    val code: String? = null,
+    val age: Int? = 0
 )

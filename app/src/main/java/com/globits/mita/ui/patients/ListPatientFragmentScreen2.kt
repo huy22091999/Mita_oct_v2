@@ -42,7 +42,7 @@ fun DefaultPreviewListPatientAssign() {
 @Composable
 fun SetLayoutListPatientFragmentAssign(
     listUser: androidx.compose.runtime.State<List<UserDto>>,
-    onClickListener: (PatientInfo) -> Unit,
+    onClickListener: (UserDto) -> Unit,
     onBackStack: () -> Unit
 ) {
     Column(
@@ -60,15 +60,21 @@ fun SetLayoutListPatientFragmentAssign(
 @Composable
 fun SetBodyListPatientAssign(
     listUser: androidx.compose.runtime.State<List<UserDto>>,
-    onClickListener: (PatientInfo) -> Unit
+    onClickListener: (UserDto) -> Unit
 ) {
     val listPatientInfo by remember {
-        mutableStateOf(mutableListOf<PatientInfo>(PatientInfo(), PatientInfo()))
+        mutableStateOf(
+            mutableListOf<UserDto>(
+                UserDto(name = "Nguyễn văn Huy"),
+                UserDto(name = "Nguyễn văn Huy"),
+                UserDto(name = "Nguyễn văn Huy")
+            )
+        )
     }
     LazyColumn(content = {
         items(listUser.value) { item ->
             SetLayoutItemPatientAssign(patient = item) {
-                onClickListener(PatientInfo())
+                onClickListener(item)
             }
         }
     })
@@ -145,15 +151,17 @@ fun SetLayoutPatientInfoItem(patient: UserDto) {
 
             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
                 val (name, btn) = createRefs()
-                Text(text = patient.name, modifier = Modifier
-                    .constrainAs(name) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                    .fillMaxWidth()
-                    .padding(end = 32.dp),
-                    fontSize = 18.sp,
-                    style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_semi_bold))))
+                patient.name?.let {
+                    Text(text = it, modifier = Modifier
+                        .constrainAs(name) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                        .fillMaxWidth()
+                        .padding(end = 32.dp),
+                        fontSize = 18.sp,
+                        style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_semi_bold))))
+                }
                 Image(
                     painterResource(id = R.drawable.img_three_dot), "Avatar",
                     modifier = Modifier
