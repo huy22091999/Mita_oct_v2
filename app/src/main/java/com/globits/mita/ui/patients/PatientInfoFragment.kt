@@ -10,10 +10,13 @@ class PatientInfoFragment : MitaBaseFragment() {
 
     @Composable
     override fun SetLayout() {
-        SetLayoutPatientActivity() {
+        SetLayoutPatientActivity(
+
+        ) {
             if (activity is NursingActivity) {
                 (activity as NursingActivity).removeBackStack()
             } else (activity as TreatmentActivity).removeBackStack()
         }
     }
+    //`false`
 }
