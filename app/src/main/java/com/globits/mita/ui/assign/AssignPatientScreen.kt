@@ -1,6 +1,7 @@
 package com.globits.mita.ui.assign
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +41,7 @@ fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit,userDto: UserDto) {
             Modifier
                 .background(Color.White)
         ) {
-            SetUpToolbarLayout(onBackStack)
+            SetUpToolbarLayout("Thông tin bệnh nhân",onBackStack)
             Column(
                 Modifier
 //                    .fillMaxHeight()
@@ -55,8 +56,7 @@ fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit,userDto: UserDto) {
                             .height(92.dp)
                     ) {}
                     Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                        SetLayoutItemPatient(patient =userDto) {
-                        }
+                        SetLayoutItemPatient(patient =userDto,Modifier)
                     }
                 }
                 SetLayoutDiagnostic()

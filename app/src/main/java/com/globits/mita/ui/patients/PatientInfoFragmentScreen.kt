@@ -8,10 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,35 +28,11 @@ import java.util.*
 @Preview
 @Composable
 fun DefaultPreviewPatientInfo() {
-    SetLayoutPatientInfo(true, onBackStack = {
+    SetLayoutPatientInfo("a",true, onBackStack = {
 
     }, onPatientClick = {})
 }
 
-@Composable
-fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit) {
-    Column(
-        Modifier
-            .background(Color.White)
-    ) {
-        SetUpToolbarLayout(onBackStack)
-        Column() {
-            Box {
-                Row(
-                    Modifier
-                        .background(BACKGROUND_TOOLBAR)
-                        .fillMaxWidth()
-                        .height(92.dp)
-                ) {}
-                Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                    SetLayoutItemPatient(patient = UserDto("", "", "", 0)) {
-                    }
-                }
-            }
-            SetLayoutListDocument()
-        }
-    }
-}
 
 @Composable
 fun SetLayoutListDocument() {
@@ -110,7 +83,7 @@ fun SetLayoutItemDoc(item: Doc) {
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Image(
-                    painterResource(id = R.drawable.img_icon_doc),
+                    painterResource(id = R.drawable.doc_new),
                     contentDescription = "image",
                     modifier = Modifier
                         .width(18.dp)
@@ -157,12 +130,12 @@ fun SetLayoutItemDoc(item: Doc) {
 }
 
 @Composable
-fun SetLayoutPatientInfo(isNursing: Boolean, onPatientClick: () -> Unit, onBackStack: () -> Unit) {
+fun SetLayoutPatientInfo(textTitle: String,isNursing: Boolean, onPatientClick: () -> Unit, onBackStack: () -> Unit) {
     Column(
         Modifier
             .background(Color.White)
     ) {
-        SetUpToolbarLayout(onBackStack)
+        SetUpToolbarLayout(textTitle,onBackStack)
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Box {
                 Row(
@@ -172,8 +145,7 @@ fun SetLayoutPatientInfo(isNursing: Boolean, onPatientClick: () -> Unit, onBackS
                         .height(92.dp)
                 ) {}
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                    SetLayoutItemPatient(patient = UserDto(name = "Nguyễn văn Huy")) {
-                    }
+                    SetLayoutItemPatient(patient = UserDto(name = "Nguyễn văn Huy"),Modifier)
                 }
             }
             // chuẩn đoán
@@ -270,11 +242,16 @@ fun SetUpItemFeatureLayout(title: String, onPatientClick: () -> Unit) {
 }
 
 @Composable
-fun SetUpToolbarLayout(onBackStack: () -> Unit) {
+fun SetUpToolbarLayout(textTitle :String,onBackStack: () -> Unit) {
+
+    var textTitle by remember {
+        mutableStateOf(textTitle)
+    }
+
     TopAppBar(
         title = {
             Text(
-                text = "Thông tin bệnh nhân",
+                text = textTitle,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier

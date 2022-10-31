@@ -18,13 +18,16 @@ class NursingActivity : MitaBaseActivity<ActivityNursingBinding>() {
         setContentView(views.root)
         addFragment(R.id.container, NursingFragment::class.java, null)
     }
-    fun addFragmentInfoPatient(){
+
+    fun addFragmentInfoPatient() {
         addFragmentToBackstack(R.id.container, NursingFragmentInfoPatient::class.java, null)
     }
-    fun addFragmentPatient(){
+
+    fun addFragmentPatient() {
         addFragmentToBackstack(R.id.container, PatientInfoFragment::class.java, null)
     }
-    fun removeBackStack(){
+
+    fun removeBackStack() {
         supportFragmentManager.popBackStack()
     }
 

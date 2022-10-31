@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -27,6 +29,7 @@ import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.home.SetLayoutSearch
 import com.globits.mita.ui.nursing.SetLayoutListPatientFragment
 import com.globits.mita.ui.theme.*
+import ir.kaaveh.sdpcompose.sdp
 
 
 @Preview
@@ -137,24 +140,35 @@ fun SetBodyListPatient(onClickListener: (UserDto) -> Unit) {
             )
         )
     }
-    LazyColumn(content = {
+    LazyColumn(contentPadding = PaddingValues(bottom = 16.dp), content = {
         items(listPatientInfo) { item ->
-            SetLayoutItemPatient(patient = item) {
+            SetLayoutItemPatient( patient = item,Modifier.clickable {
                 onClickListener(item)
-            }
+            })
         }
     })
 }
 
 @Composable
-fun SetLayoutItemPatient(patient: UserDto, onClickPatient: () -> Unit) {
+fun SetLayoutItemPatient( patient: UserDto,modifier: Modifier) {
     Card(
-        modifier = Modifier
+        modifier
             .fillMaxWidth()
             .padding(bottom = 12.dp, top = 4.dp)
-            .clickable { onClickPatient() },
-        shape = RoundedCornerShape(12.dp),
-        elevation = 8.dp
+            .shadow(ambientColor = Color.Blue, elevation = 8.sdp)
+//            .clip(shape = RoundedCornerShape(12.dp))
+
+//            .also { modifier ->
+//                if (isClick) {
+//                    modifier.clickable {
+//                        onClickPatient()
+//                    }
+//                }
+//            }
+        ,
+        shape = RoundedCornerShape(12.dp)
+
+
     ) {
         Column(
             modifier = Modifier

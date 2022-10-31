@@ -50,11 +50,11 @@ fun PreviewLayout() {
 }
 
 @Composable
-fun SetLayoutPatientActivity(onBackStack:()->Unit) {
+fun   SetLayoutPatientActivity(onBackStack:()->Unit) {
     MaterialTheme() {
         Column() {
             Column(modifier = Modifier.background(PRIMARY_COLOR)) {
-                SetUpToolbarLayout(onBackStack)
+                SetUpToolbarLayout("Bệnh án",onBackStack)
                 SetViewPagerLayout()
             }
         }
@@ -66,7 +66,7 @@ fun SetLayoutPatientActivity(onBackStack:()->Unit) {
 @Composable
 fun SetViewPagerLayout() {
     val tabData = listOf(
-        "Xét nghiệm", "CHDA", "Thuốc"
+        "Xét nghiệm", "CĐHA", "Thuốc"
     )
     val pagerState = rememberPagerState(
         pageCount = tabData.size,

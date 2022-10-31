@@ -38,7 +38,7 @@ val styleText1 = TextStyle(
     fontFamily = FontFamily(Font(R.font.nunito_sans_semi_bold)),
     fontWeight = FontWeight.Bold,
     fontSize = 13.sp,
-    color = PRIMARY_COLOR
+    color = TEXT_COLOR4
 )
 val styleText2 = TextStyle(
     fontFamily = FontFamily(Font(R.font.nunito_sans_regular)),

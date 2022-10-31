@@ -73,20 +73,19 @@ fun SetBodyListPatientAssign(
     }
     LazyColumn(content = {
         items(listUser.value) { item ->
-            SetLayoutItemPatientAssign(patient = item) {
+            SetLayoutItemPatientAssign(patient = item,Modifier.clickable {
                 onClickListener(item)
-            }
+            })
         }
     })
 }
 
 @Composable
-fun SetLayoutItemPatientAssign(patient: UserDto, onClickPatient: () -> Unit) {
+fun SetLayoutItemPatientAssign(patient: UserDto, modifier: Modifier) {
     Card(
-        modifier = Modifier
+        modifier
             .fillMaxWidth()
-            .padding(bottom = 12.dp, top = 4.dp)
-            .clickable { onClickPatient() },
+            .padding(bottom = 12.dp, top = 4.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
