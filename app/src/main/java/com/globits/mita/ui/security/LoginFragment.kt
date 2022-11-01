@@ -48,7 +48,7 @@ class LoginFragment @Inject constructor() : MitaBaseFragment() {
     override fun SetLayout() {
         MaterialTheme() {
             LoginScreen(onClickLogin = { username, password ->
-                loginSubmit(username,password)
+                loginSubmit(username, password)
             })
         }
     }
@@ -58,30 +58,34 @@ class LoginFragment @Inject constructor() : MitaBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
     }
-    private fun loginSubmit(username: String, password: String)
-    {
-        if (!username.isNullOrEmpty()&&!password.isNullOrEmpty())
-        {
+
+    private fun loginSubmit(username: String, password: String) {
+        if (!username.isNullOrEmpty() && !password.isNullOrEmpty()) {
             viewModel.handle(SecurityViewAction.LogginAction(username, password))
-        }else{
+        } else {
             activity?.snackbar("Bạn chưa nhập đủ username và password")
         }
     }
 
-    override fun invalidate(): Unit = withState(viewModel){
-        when(it.asyncLogin){
-            is Success ->{
-                it.asyncLogin.invoke()?.let { token->
-                    val sessionManager = context?.let { it1 -> SessionManager(it1.applicationContext) }
-                    token.accessToken?.let { it1 -> sessionManager!! .saveAuthToken(it1) }
+    override fun invalidate(): Unit = withState(viewModel) {
+        when (it.asyncLogin) {
+            is Success -> {
+                it.asyncLogin.invoke()?.let { token ->
+                    val sessionManager =
+                        context?.let { it1 -> SessionManager(it1.applicationContext) }
+                    token.accessToken?.let { it1 -> sessionManager!!.saveAuthToken(it1) }
                     token.refreshToken?.let { it1 -> sessionManager!!.saveAuthTokenRefresh(it1) }
                 }
-                Toast.makeText(requireContext(),getString(R.string.login_success), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.login_success),
+                    Toast.LENGTH_LONG
+                ).show()
                 startActivity(Intent(requireContext(), MainActivity::class.java))
                 activity?.finish()
             }
-            is Fail ->{
-                if((it.asyncLogin as Fail<TokenResponse>).error.message?.contains("401") == true){
+            is Fail -> {
+                if ((it.asyncLogin as Fail<TokenResponse>).error.message?.contains("401") == true) {
                     activity?.snackbar("Tài khoản mật khẩu không chính xác.")
                 }
                 activity?.snackbar("Đã có lỗi xảy ra")
@@ -207,7 +211,7 @@ fun LoginScreen(onClickLogin: (String, String) -> Unit) {
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
                 autoCorrect = true,
-                keyboardType = if (isShowPassword) KeyboardType.Number else KeyboardType.Password,
+                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
             visualTransformation = if (isShowPassword) VisualTransformation.None else PasswordVisualTransformation()

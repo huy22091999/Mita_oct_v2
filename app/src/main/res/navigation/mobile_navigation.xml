@@ -105,7 +105,7 @@
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/treatmentFragmentInfoPatient"
-        android:name="com.globits.mita.ui.treatment.TreatmentFragmentInfoPatient"
+        android:name="com.globits.mita.ui.treatment.TreatmentInfoPatientFragment"
         android:label="fragment_treatment_info_patient"
         tools:layout="@layout/fragment_treatment_info_patient" />
 </navigation>

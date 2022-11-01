@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.globits.mita.core.MitaBaseFragment
 import com.globits.mita.data.network.UserDto
-import com.globits.mita.ui.patients.SetLayoutListPatientFragmentAssign
+import com.globits.mita.ui.assign.view.SetLayoutListPatientFragmentAssign
 
 
 class PacsFragment : MitaBaseFragment() {

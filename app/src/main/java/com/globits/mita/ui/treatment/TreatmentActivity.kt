@@ -19,7 +19,7 @@ class TreatmentActivity : MitaBaseActivity<ActivityTreatmentBinding>() {
         addFragment(R.id.container,TreatmentFragment::class.java)
     }
     fun addFragmentInfoPatient(){
-        addFragmentToBackstack(R.id.container,TreatmentFragmentInfoPatient::class.java)
+        addFragmentToBackstack(R.id.container,TreatmentInfoPatientFragment::class.java)
     }
     fun addFragmentPatient(){
         addFragmentToBackstack(R.id.container, PatientInfoFragment::class.java, null)

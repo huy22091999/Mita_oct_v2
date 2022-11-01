@@ -11,7 +11,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.globits.mita.core.MitaBaseFragment
 import com.globits.mita.data.network.UserDto
-import com.globits.mita.ui.patients.SetLayoutListPatientFragmentAssign
+import com.globits.mita.ui.assign.view.SetLayoutListPatientFragmentAssign
 import com.globits.mita.utils.snackbar
 import javax.inject.Inject
 

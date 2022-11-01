@@ -2,7 +2,7 @@ package com.globits.mita.ui.treatment
 
 import androidx.compose.runtime.Composable
 import com.globits.mita.core.MitaBaseFragment
-import com.globits.mita.ui.nursing.SetLayoutListPatientFragment
+import com.globits.mita.ui.nursing.view.SetLayoutListPatientFragment
 
 
 class TreatmentFragment : MitaBaseFragment() {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.compose.runtime.Composable
 import com.globits.mita.core.MitaBaseFragment
+import com.globits.mita.ui.nursing.view.SetLayoutListPatientFragment
 
 
 class NursingFragment : MitaBaseFragment() {

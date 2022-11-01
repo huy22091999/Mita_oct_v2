@@ -5,6 +5,7 @@ import android.view.View
 import androidx.compose.runtime.Composable
 import com.globits.mita.core.MitaBaseFragment
 import com.globits.mita.data.network.UserDto
+import com.globits.mita.ui.assign.view.SetLayoutPatientInfoAssign
 
 
 class AssignInfoFragment : MitaBaseFragment() {
