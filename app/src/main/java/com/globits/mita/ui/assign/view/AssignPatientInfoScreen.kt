@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.sp
 import com.globits.mita.R
 import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
-import com.globits.mita.ui.patients.SetLayoutDiagnostic
-import com.globits.mita.ui.patients.SetUpToolbarLayout
 import com.globits.mita.ui.theme.*
+import com.globits.mita.ui.treatment.view.SetLayoutDiagnostic
+import com.globits.mita.ui.treatment.view.SetUpToolbarLayout
 import com.globits.mita.utils.ExposedDropdownMenu
 import com.globits.mita.utils.formatNumber
 

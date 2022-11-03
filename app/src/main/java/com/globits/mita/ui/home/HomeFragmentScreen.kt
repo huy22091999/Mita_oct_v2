@@ -14,7 +14,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -285,12 +284,11 @@ fun SetLayoutItemFeature(
             }
             .padding(end = 6.dp)
             .padding(end = 8.dp)
-            .fillMaxWidth(.5f)
-            .clickable {
-                onClickListener1()
-            } , elevation = 4.dp, shape = RoundedCornerShape(12.dp)
+            .fillMaxWidth(.5f), elevation = 4.dp, shape = RoundedCornerShape(12.dp)
         ) {
-            Row {
+            Row(modifier = Modifier.clickable {
+                onClickListener1()
+            }) {
                 Image(
                     painterResource(id = image1), "Avatar",
                     modifier = Modifier

@@ -20,5 +20,6 @@ data class UserDto(
     val id: String? = null,
     val name: String? = null,
     val code: String? = null,
-    val age: Int? = 0
+    val age: Int? = 0,
+    val status :Int? = null,
 )

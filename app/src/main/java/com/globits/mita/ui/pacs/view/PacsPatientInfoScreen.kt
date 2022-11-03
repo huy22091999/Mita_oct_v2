@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -25,9 +26,9 @@ import androidx.compose.ui.unit.sp
 import com.globits.mita.R
 import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
-import com.globits.mita.ui.patients.Doc
-import com.globits.mita.ui.patients.SetUpToolbarLayout
 import com.globits.mita.ui.theme.*
+import com.globits.mita.ui.treatment.view.Doc
+import com.globits.mita.ui.treatment.view.SetUpToolbarLayout
 import java.util.*
 
 
@@ -35,13 +36,12 @@ import java.util.*
 @Composable
 fun DefaultPreviewPatientInfo() {
     SetLayoutPatientInfoPacs(onBackStack = {
-
-    })
+    }, onClick = {})
 }
 
 
 @Composable
-fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit) {
+fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit,onClick: () -> Unit) {
     Column(
         Modifier
             .background(Color.White)
@@ -60,12 +60,15 @@ fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit) {
                 }
             }
             SetLayoutListDocument()
+            {
+                onClick()
+            }
         }
     }
 }
 
 @Composable
-fun SetLayoutListDocument() {
+fun SetLayoutListDocument(onClick: () -> Unit) {
     val listDoc by remember {
         mutableStateOf(
             mutableListOf<Doc>(
@@ -85,21 +88,27 @@ fun SetLayoutListDocument() {
     LazyColumn(modifier = Modifier.padding(start = 20.dp, end = 20.dp)) {
         items(listDoc) { item ->
             SetLayoutItemDoc(item)
+            {
+                onClick()
+            }
         }
 
     }
 }
 
 @Composable
-fun SetLayoutItemDoc(item: Doc) {
+fun SetLayoutItemDoc(item: Doc,onClick:()->Unit) {
     Row(
         modifier = Modifier
             .padding(top = 16.dp)
             .border(
-                border = BorderStroke(1.dp, STROKE_BTN_FEATURE),
-                shape = RoundedCornerShape(12.dp)
+                width = 1.dp, color = STROKE_BTN_FEATURE, RoundedCornerShape(12.dp)
             )
+            .clip(shape =RoundedCornerShape(12.dp) )
             .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
             .padding(16.dp), verticalAlignment = Alignment.CenterVertically
     ) {
         Card(

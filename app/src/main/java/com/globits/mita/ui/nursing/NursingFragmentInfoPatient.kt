@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.compose.runtime.Composable
 import com.globits.mita.core.MitaBaseFragment
-import com.globits.mita.ui.patients.SetLayoutPatientInfo
+import com.globits.mita.ui.treatment.view.SetLayoutPatientInfo
 
 class NursingFragmentInfoPatient : MitaBaseFragment() {
     @Composable

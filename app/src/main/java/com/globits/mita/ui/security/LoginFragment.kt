@@ -15,6 +15,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -171,7 +172,8 @@ fun LoginScreen(onClickLogin: (String, String) -> Unit) {
                     width = 1.sdp,
                     color = STROKE_EDIT_TEXT_LOGIN,
                     shape = RoundedCornerShape(10.sdp)
-                ),
+                )
+                .clip(shape = RoundedCornerShape(10.sdp)),
             onValueChange = { txtUserName = it },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
@@ -192,7 +194,8 @@ fun LoginScreen(onClickLogin: (String, String) -> Unit) {
                     width = 1.sdp,
                     color = STROKE_EDIT_TEXT_LOGIN,
                     shape = RoundedCornerShape(10.sdp),
-                ),
+                )
+                .clip(shape = RoundedCornerShape(10.sdp)),
             onValueChange = { txtPassword = it },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,

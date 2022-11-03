@@ -2,6 +2,7 @@ package com.globits.mita.ui.assign.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -50,7 +52,7 @@ fun DefaultListPatient() {
 }
 
 @Composable
-fun SetLayoutListPatientFragmentAssign(
+fun  SetLayoutListPatientFragmentAssign(
     listUser: State<List<UserDto>>?,
     onClickListener: (UserDto) -> Unit,
     onBackStack: () -> Unit
@@ -87,14 +89,14 @@ fun SetBodyListPatientAssign(
 @Composable
 fun SetLayoutItemPatientAssign(patient: UserDto, modifier: Modifier) {
     Card(
-        modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 12.dp, top = 4.dp),
         shape = RoundedCornerShape(12.dp),
-        elevation = 8.dp
+        elevation = 4.dp
     ) {
         Column(
-            modifier = Modifier
+            modifier
                 .padding(16.dp)
         ) {
             SetLayoutPatientInfoItem(patient)
@@ -130,6 +132,8 @@ fun SetLayoutPatientInfoItem(patient: UserDto) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
+            .border(width = 0.dp, color = Color.Transparent,RoundedCornerShape(12.dp))
+            .clip(shape = RoundedCornerShape(12.dp))
     ) {
         val (layoutImage, layoutText) = createRefs()
         Image(

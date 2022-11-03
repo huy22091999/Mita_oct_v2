@@ -21,6 +21,12 @@ class PacsActivity : MitaBaseActivity<ActivityPacsBinding>() {
     fun addFragmentInfoPatient() {
         addFragmentToBackstack(R.id.container, PacsInfoFragment::class.java)
     }
+
+    fun addFragmentImage() {
+        addFragmentToBackstack(R.id.container, PacsImageFragment::class.java)
+    }
+
+
     fun removeBackStack(){
         supportFragmentManager.popBackStack()
     }

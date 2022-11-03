@@ -7,9 +7,10 @@ import com.globits.mita.ui.pacs.view.SetLayoutPatientInfoPacs
 class PacsInfoFragment : MitaBaseFragment() {
     @Composable
     override fun SetLayout() {
-        SetLayoutPatientInfoPacs() {
-            (activity as PacsActivity).removeBackStack()
-        }
+        SetLayoutPatientInfoPacs(
+            onBackStack = { (activity as PacsActivity).removeBackStack() },
+            onClick = {(activity as PacsActivity).addFragmentImage()}
+        )
     }
 
 

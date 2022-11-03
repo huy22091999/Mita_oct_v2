@@ -14,7 +14,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -28,7 +28,6 @@ import com.globits.mita.data.network.UserDto
 import com.globits.mita.ui.assign.view.SetLayoutPatientInfoItem
 import com.globits.mita.ui.home.SetLayoutSearch
 import com.globits.mita.ui.theme.*
-import ir.kaaveh.sdpcompose.sdp
 
 @Preview
 @Composable
@@ -85,7 +84,7 @@ fun SetHeaderListPatient() {
         SetLayoutSearch(title = "Tìm kiếm bệnh nhân") {
         }
         var valueState by remember {
-            mutableStateOf("")
+            mutableStateOf("Đang điều trị")
         }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Row(
@@ -147,17 +146,19 @@ fun SetBodyListPatient(onClickListener: (UserDto) -> Unit) {
 @Composable
 fun SetLayoutItemPatient(patient: UserDto, modifier: Modifier) {
     Card(
-        modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp, top = 4.dp)
-            .shadow(ambientColor = Color.Blue, elevation = 8.sdp),
-        shape = RoundedCornerShape(12.dp)
+        modifier = Modifier
 
+            .fillMaxWidth()
+            .padding(bottom = 12.dp, top = 4.dp),
+        elevation = 4.dp,
+        shape = RoundedCornerShape(12.dp)
 
     ) {
         Column(
-            modifier = Modifier
+            modifier
                 .padding(16.dp)
+                .border(width = 0.dp, color = Color.Transparent, RoundedCornerShape(12.dp))
+                .clip(shape = RoundedCornerShape(12.dp))
         ) {
             SetLayoutPatientInfoItem(patient)
             Row(

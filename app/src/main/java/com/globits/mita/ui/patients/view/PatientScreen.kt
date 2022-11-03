@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.globits.mita.R
 import com.globits.mita.ui.assign.view.SetLine
 import com.globits.mita.ui.theme.*
+import com.globits.mita.ui.treatment.view.SetUpToolbarLayout
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
