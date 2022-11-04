@@ -35,7 +35,7 @@ class RemoteDataSource() {
 
     companion object {
         private const val BASE_URL =
-            "http://training-api.oceantech.com.vn/cms/"
+            "http://192.168.0.157:8020/mita/"
 //            "http://api.oceantech.vn/asset/"
         private const val DEFAULT_USER_AGENT = "Mita-Android"
         private const val DEFAULT_CONTENT_TYPE = "application/json"
@@ -46,7 +46,8 @@ class RemoteDataSource() {
         context: Context
     ): Api {
         val gson = GsonBuilder()
-            .registerTypeAdapter(Date::class.java, UnitEpochDateTypeAdapter())
+//            .registerTypeAdapter(Date::class.java, UnitEpochDateTypeAdapter())
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
             .setLenient()
             .create()
 
@@ -141,7 +142,7 @@ class RemoteDataSource() {
             if (value == null) {
                 out?.nullValue()
             } else {
-                out?.value(value.format("yyyy-MM-dd"))
+                out?.value(value.format("yyyy-MM-dd'T'HH:mm:ss"))
             }
         }
 
@@ -151,7 +152,8 @@ class RemoteDataSource() {
                     _in.nextNull()
                     null
                 } else {
-                    Date(_in.nextLong())
+                    @Suppress("DEPRECATION")
+                    Date(_in.toString())
                 }
             } else null
     }

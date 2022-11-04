@@ -1,8 +1,11 @@
 package com.globits.mita.ui.pacs.view
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
-import com.globits.mita.data.network.UserDto
+import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.assign.view.SetLayoutListPatientFragmentAssign
 
 
@@ -10,13 +13,13 @@ import com.globits.mita.ui.assign.view.SetLayoutListPatientFragmentAssign
 @Composable
 fun DefaultPreviewListPatient() {
 
-    var listUser:MutableState<List<UserDto>> = remember {
-        mutableStateOf<List<UserDto>>(
+    var listUser: MutableState<List<Patient>> = remember {
+        mutableStateOf<List<Patient>>(
             mutableListOf(
-                UserDto(name = "Nguyễn văn Huy"),
-                UserDto(name = "Nguyễn văn Huy"),
-                UserDto(name = "Nguyễn văn Huy"),
-                UserDto(name = "Nguyễn văn Huy")
+                Patient(displayName = "Nguyễn văn Huy"),
+                Patient(displayName = "Nguyễn văn Huy"),
+                Patient(displayName = "Nguyễn văn Huy"),
+                Patient(displayName = "Nguyễn văn Huy")
             )
         )
     }
@@ -25,7 +28,10 @@ fun DefaultPreviewListPatient() {
 
     }, onClickListener = {
 
-    }, listUser = listUser
+    }, listUser = listUser,
+        getPatient = {
+
+        }
     )
 
 }

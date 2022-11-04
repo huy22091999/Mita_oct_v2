@@ -13,9 +13,9 @@
     <application
         android:name="com.globits.mita.MitaApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/mita_logo_foreground"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/mita_logo_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.mita"
         android:usesCleartextTraffic="true">
@@ -26,10 +26,6 @@
         <activity
             android:theme="@style/Theme.mita.NoActionBar"
             android:name=".ui.assign.AssignActivity"
-            android:exported="false" />
-        <activity
-            android:theme="@style/Theme.mita.NoActionBar"
-            android:name=".ui.patients.PatientActivity"
             android:exported="false" />
         <activity
             android:theme="@style/Theme.mita.NoActionBar"

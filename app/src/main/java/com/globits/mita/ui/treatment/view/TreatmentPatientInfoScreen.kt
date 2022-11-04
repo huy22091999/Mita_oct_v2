@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -22,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
-import com.globits.mita.data.network.UserDto
+import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
 import com.globits.mita.ui.theme.*
 import java.util.*
@@ -34,7 +35,7 @@ fun DefaultPreviewPatientInfo() {
     SetLayoutPatientInfo("Thông tin bệnh nhân",
         false,
         onBackStack = { },
-        onPatientClick = { })
+        onPatientClick = { }, patient = Patient())
 }
 
 @Composable
@@ -42,7 +43,8 @@ fun SetLayoutPatientInfo(
     textTitle: String,
     isNursing: Boolean,
     onPatientClick: () -> Unit,
-    onBackStack: () -> Unit
+    onBackStack: () -> Unit,
+    patient: Patient
 ) {
     Column(
         Modifier
@@ -58,7 +60,10 @@ fun SetLayoutPatientInfo(
                         .height(92.dp)
                 ) {}
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                    SetLayoutItemPatient(patient = UserDto(name = "Nguyễn văn Huy"), Modifier)
+                    SetLayoutItemPatient(
+                        patient = patient,
+                        Modifier
+                    )
                 }
             }
             // chuẩn đoán
@@ -117,16 +122,19 @@ fun SetUpListFeatureLayout(isNursing: Boolean, onPatientClick: () -> Unit) {
 
 @Composable
 fun SetUpItemFeatureLayout(title: String, onPatientClick: () -> Unit) {
-    Column(modifier = Modifier
-        .padding(bottom = 16.dp)
-        .clickable { onPatientClick() }) {
+    Column(
+        modifier = Modifier
+            .padding(bottom = 16.dp)
+    ) {
         Row(
             modifier = Modifier
                 .border(
                     border = BorderStroke(1.dp, STROKE_BTN_FEATURE),
                     shape = RoundedCornerShape(12.dp)
                 )
+                .clip(shape = RoundedCornerShape(12.dp))
                 .fillMaxWidth()
+                .clickable { onPatientClick() }
                 .padding()
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,

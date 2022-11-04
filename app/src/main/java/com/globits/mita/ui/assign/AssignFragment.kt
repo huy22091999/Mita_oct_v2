@@ -10,33 +10,35 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.globits.mita.core.MitaBaseFragment
-import com.globits.mita.data.network.UserDto
+import com.globits.mita.data.model.Patient
+import com.globits.mita.data.model.PatientFilter
 import com.globits.mita.ui.assign.view.SetLayoutListPatientFragmentAssign
 import com.globits.mita.utils.snackbar
-import javax.inject.Inject
 
 
-class AssignFragment @Inject constructor() : MitaBaseFragment() {
+class AssignFragment : MitaBaseFragment() {
+
     val viewModel: AssignViewModel by activityViewModel()
 
-    var _listUser = mutableStateOf<List<UserDto>>(
-        mutableListOf(
-            UserDto(name = "Nguyễn văn Huy"),
-            UserDto(name = "Nguyễn văn Huy"),
-            UserDto(name = "Nguyễn văn Huy"),
-        )
-    )
-    private val listUser: State<List<UserDto>> = _listUser
+    var _listUser = mutableStateOf<List<Patient>>(mutableListOf())
+    private val listUser: State<List<Patient>> = _listUser
 
     @Composable
     override fun SetLayout() {
 
         SetLayoutListPatientFragmentAssign(onClickListener = {
             (activity as AssignActivity).addFragmentInfoPatient()
+            viewModel.handle(AssignViewAction.SetPatientDetail(it))
         }, onBackStack = {
             (activity as AssignActivity).finish()
-        }, listUser = listUser)
+        }, listUser = listUser,
+            getPatient = {
+                viewModel.handle(AssignViewAction.GetPatients(PatientFilter("", 1, 10, it)))
+            })
+
+
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,13 +49,15 @@ class AssignFragment @Inject constructor() : MitaBaseFragment() {
     }
 
     private fun updateState(it: AssignViewState) {
-        when (it.asyncUsers) {
+        when (it.asyncPatients) {
             is Success -> {
-                it.asyncUsers.invoke()?.data.let {
+                it.asyncPatients.invoke()?.let {
                     if (it != null) {
                         //_listUser.value=it
+                        _listUser.value = it.content!!
                     }
                 }
+
             }
             is Fail -> {
                 requireActivity().snackbar("Đã xảy ra lỗi xin vui lòng thử lại.")

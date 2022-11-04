@@ -26,21 +26,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.globits.mita.R
-import com.globits.mita.data.network.UserDto
+import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.nursing.view.SetHeaderListPatient
 import com.globits.mita.ui.nursing.view.SetUpToolbarLayoutLight
 import com.globits.mita.ui.theme.*
+import java.util.*
+import java.util.Calendar.getInstance
 
 @Preview
 @Composable
 fun DefaultListPatient() {
-    var listUser: MutableState<List<UserDto>> = remember {
-        mutableStateOf<List<UserDto>>(
+    var listUser: MutableState<List<Patient>> = remember {
+        mutableStateOf<List<Patient>>(
             mutableListOf(
-                UserDto(name = "Nguyễn văn Huy"),
-                UserDto(name = "Nguyễn văn Huy"),
-                UserDto(name = "Nguyễn văn Huy"),
-                UserDto(name = "Nguyễn văn Huy")
+                Patient(displayName = "Nguyễn văn Huy"),
+                Patient(displayName = "Nguyễn văn Huy"),
+                Patient(displayName = "Nguyễn văn Huy"),
+                Patient(displayName = "Nguyễn văn Huy")
             )
         )
     }
@@ -48,22 +50,30 @@ fun DefaultListPatient() {
 
     }, onBackStack = {
 
-    }, listUser = listUser)
+    }, listUser = listUser, getPatient = {})
 }
 
 @Composable
-fun  SetLayoutListPatientFragmentAssign(
-    listUser: State<List<UserDto>>?,
-    onClickListener: (UserDto) -> Unit,
-    onBackStack: () -> Unit
+fun SetLayoutListPatientFragmentAssign(
+    listUser: State<List<Patient>>?,
+    onClickListener: (Patient) -> Unit,
+    onBackStack: () -> Unit,
+    getPatient: (filter: Int) -> Unit
 ) {
+
+
     Column(
         modifier = Modifier
             .padding(16.dp)
             .background(Color.White)
     ) {
         SetUpToolbarLayoutLight(onBackStack = onBackStack)
+
         SetHeaderListPatient()
+        {
+            getPatient(it)
+        }
+
         if (listUser != null) {
             SetBodyListPatientAssign(listUser, onClickListener)
         }
@@ -73,8 +83,8 @@ fun  SetLayoutListPatientFragmentAssign(
 
 @Composable
 fun SetBodyListPatientAssign(
-    listUser: State<List<UserDto>>,
-    onClickListener: (UserDto) -> Unit
+    listUser: State<List<Patient>>,
+    onClickListener: (Patient) -> Unit
 ) {
 
     LazyColumn(content = {
@@ -87,7 +97,7 @@ fun SetBodyListPatientAssign(
 }
 
 @Composable
-fun SetLayoutItemPatientAssign(patient: UserDto, modifier: Modifier) {
+fun SetLayoutItemPatientAssign(patient: Patient, modifier: Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -117,7 +127,7 @@ fun SetLayoutItemPatientAssign(patient: UserDto, modifier: Modifier) {
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = "#ACC: 22344, Chụp cắt lớp vi tính khớp gối thẳng nghiêng 32 dãy",
+                    text = "#ACC: ${patient.diagnostic}",
                     style = styleText
                 )
             }
@@ -128,11 +138,19 @@ fun SetLayoutItemPatientAssign(patient: UserDto, modifier: Modifier) {
 }
 
 @Composable
-fun SetLayoutPatientInfoItem(patient: UserDto) {
+fun SetLayoutPatientInfoItem(patient: Patient) {
+
+
+    val cal: Calendar = getInstance()
+    if (patient.dob != null) {
+        cal.time = patient.dob
+    }
+
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .border(width = 0.dp, color = Color.Transparent,RoundedCornerShape(12.dp))
+            .border(width = 0.dp, color = Color.Transparent, RoundedCornerShape(12.dp))
             .clip(shape = RoundedCornerShape(12.dp))
     ) {
         val (layoutImage, layoutText) = createRefs()
@@ -158,7 +176,7 @@ fun SetLayoutPatientInfoItem(patient: UserDto) {
 
             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
                 val (name, btn) = createRefs()
-                patient.name?.let {
+                patient.displayName?.let {
                     Text(text = it, modifier = Modifier
                         .constrainAs(name) {
                             start.linkTo(parent.start)
@@ -182,7 +200,11 @@ fun SetLayoutPatientInfoItem(patient: UserDto) {
             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
                 val (dob, status) = createRefs()
                 Text(
-                    text = "Sinh năm 2000 | 22 tuổi | Nam",
+                    text = "Sinh năm ${cal.get(Calendar.YEAR)} | ${
+                        getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR)
+                    } tuổi | ${if(patient.gender == "M") "Nam" else "Nữ"}",
+
+//                    text = "Sinh năm 200",
                     modifier = Modifier.constrainAs(dob) {
                         start.linkTo(parent.start)
                     },
@@ -192,12 +214,12 @@ fun SetLayoutPatientInfoItem(patient: UserDto) {
                 )
                 Text(
                     text = buildAnnotatedString {
-                        append("\u2022 Đang điều trị")
+                        append(if (patient.status == 0) "\u2022 Đang điều trị" else "\u2022 Kết thúc điều trị")
 
                     }, modifier = Modifier.constrainAs(status) {
                         start.linkTo(dob.end)
                         end.linkTo(parent.end)
-                    }, fontSize = 10.sp, color = TEXT_STATUS,
+                    }, fontSize = 10.sp, color = if(patient.status == 0 ) TEXT_STATUS else ICON_LOCATION,
                     style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_regular)))
                 )
             }
@@ -225,7 +247,7 @@ fun SetLayoutPatientInfoItem(patient: UserDto) {
             )
             Text(
                 modifier = Modifier.padding(start = 4.dp),
-                text = "Mã BN:22000022",
+                text = "Mã BN:${patient.code}",
                 style = styleText
             )
         }
@@ -245,7 +267,7 @@ fun SetLayoutPatientInfoItem(patient: UserDto) {
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = "Đối tượng: Viện phí",
+                    text ="Đối tượng: ${if (patient.objectType == 0) "BHYT" else "Viện phí"}" ,
                     style = styleText
                 )
             }

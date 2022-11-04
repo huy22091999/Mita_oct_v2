@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.globits.mita.R
+import com.globits.mita.data.model.User
 import com.globits.mita.ui.theme.*
 import ir.kaaveh.sdpcompose.sdp
 import java.util.*
@@ -32,13 +33,13 @@ import java.util.*
 @Preview
 @Composable
 fun DefaultPreview() {
-    setLayoutFragment(
-        requireContext = null,
-        onClickListNursing = {},
-        onClickListAssign = {},
-        onClickListPacs = {},
-        onClickListTreatment = {}
-    )
+//    setLayoutFragment(
+//        requireContext = null,
+//        onClickListNursing = {},
+//        onClickListAssign = {},
+//        onClickListPacs = {},
+//        onClickListTreatment = {},
+//    )
 }
 
 @Composable
@@ -48,6 +49,7 @@ fun setLayoutFragment(
     onClickListTreatment: () -> Unit,
     onClickListPacs: () -> Unit,
     onClickListAssign: () -> Unit,
+    user : MutableState<User>
 ) {
     MaterialTheme {
         Column(
@@ -58,7 +60,7 @@ fun setLayoutFragment(
                 .background(Color.White)
                 .verticalScroll(rememberScrollState())
         ) {
-            setLayoutHeader()
+            setLayoutHeader(user = user)
             setLayoutFeature(
                 onClickListNursing,
                 onClickListTreatment,
@@ -72,7 +74,7 @@ fun setLayoutFragment(
 }
 
 @Composable
-fun setLayoutHeader(
+fun setLayoutHeader(user : MutableState<User>
 ) {
     val nameRemember by remember { mutableStateOf("Trang") }
     Column {
@@ -89,7 +91,7 @@ fun setLayoutHeader(
 
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
-                    text = "Bác sĩ $nameRemember",
+                    text = "Bác sĩ ${user.value.displayName}",
                     fontSize = 28.sp,
                     style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_bold)))
                 )
@@ -315,13 +317,12 @@ fun SetLayoutItemFeature(
                 }
                 .padding(start = 6.dp)
                 .padding(end = 8.dp)
-                .fillMaxWidth(.5f)
-                .clickable {
-                    onClickListener2()
-                }, elevation = 4.dp,
+                .fillMaxWidth(.5f), elevation = 4.dp,
             shape = RoundedCornerShape(12.dp)
         ) {
-            Row {
+            Row(modifier = Modifier.clickable {
+                onClickListener2()
+            }) {
                 Image(
                     painterResource(id = image2), "Avatar",
                     modifier = Modifier

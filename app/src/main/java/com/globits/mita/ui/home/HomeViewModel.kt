@@ -12,6 +12,11 @@ class HomeViewModel @AssistedInject constructor(
     val repository: UserRepository,
 ) : MitaViewModel<HomeViewState, HomeViewAction, HomeViewEvent>(state) {
 
+
+    init {
+        handleCurrentUser()
+    }
+
     override fun handle(action: HomeViewAction) {
         when (action) {
             is HomeViewAction.GetCurrentUser -> handleCurrentUser()

@@ -8,19 +8,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.globits.mita.R
 import com.globits.mita.ui.theme.BACKGROUND_IMAGE
 import com.globits.mita.ui.theme.BODER_ICON
@@ -41,7 +45,7 @@ fun DefaultViewImage() {
 }
 
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun ImageScreen(onBack:() ->Unit) {
 
@@ -51,6 +55,8 @@ fun ImageScreen(onBack:() ->Unit) {
         infiniteLoop = true,
         initialPage = 0,
     )
+
+    var scale by remember { mutableStateOf(1f) }
 
     Column(
         modifier = Modifier
@@ -71,22 +77,28 @@ fun ImageScreen(onBack:() ->Unit) {
             state = pagerState,
             modifier = Modifier.fillMaxWidth()
         ) { page ->
-            Image(
+            GlideImage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(400.dp)
                     .padding(start = 20.dp, end = 20.dp)
-                ,
-                painter = painterResource(
+                    .graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale
+                    ),
+                model =
                     when (page) {
-                        0 -> R.drawable.img_xquang
-                        1 -> R.drawable.img_xquang
-                        2 -> R.drawable.img_xquang
-                        3 -> R.drawable.img_xquang
+                        0 -> "http://192.168.0.157:8020/mita/public/images/img.png"
+                        1 -> "http://192.168.0.157:8020/mita/public/images/img.png"
+                        2 -> "http://192.168.0.157:8020/mita/public/images/img.png"
+                        3 -> "http://192.168.0.157:8020/mita/public/images/img.png"
                         else -> throw IllegalStateException("image not provided for page $page")
                     }
-                ), contentDescription = null
+                , contentDescription = null
             )
+            {
+                it.thumbnail()
+            }
         }
 
         Row(

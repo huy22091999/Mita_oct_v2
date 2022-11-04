@@ -8,7 +8,7 @@ import com.globits.mita.ui.nursing.view.SetLayoutListPatientFragment
 @Preview
 @Composable
 fun DefaultPreviewListPatient() {
-    SetLayoutListPatientFragment(onClickListener = {
-
-    }, onBackStack = { })
+//    SetLayoutListPatientFragment(onClickListener = {
+//
+//    }, onBackStack = { }, getPatient = {})
 }

@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 
 interface UserApi {
-    @GET("api/users/getCurrentUser")
+    @GET("users/get_user_current")
     fun getCurrentUser(): Observable<User>
 
 }

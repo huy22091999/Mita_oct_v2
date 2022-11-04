@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
-import com.globits.mita.data.network.UserDto
+import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.assign.view.SetLayoutPatientInfoItem
 import com.globits.mita.ui.home.SetLayoutSearch
 import com.globits.mita.ui.theme.*
@@ -32,7 +32,7 @@ import com.globits.mita.ui.theme.*
 @Preview
 @Composable
 fun DefaultPreviewListPatient() {
-    SetLayoutListPatientFragment(onBackStack = {}, onClickListener = {})
+//    SetLayoutListPatientFragment(onBackStack = {}, onClickListener = {}, getPatient = {},)
 }
 
 
@@ -79,23 +79,33 @@ fun SetUpToolbarLayoutLight(onBackStack: () -> Unit) {
 }
 
 @Composable
-fun SetHeaderListPatient() {
+fun SetHeaderListPatient(clickFilter:(filter:Int)->Unit) {
     Column {
         SetLayoutSearch(title = "Tìm kiếm bệnh nhân") {
         }
+
+        var filter by remember {
+            mutableStateOf(1)
+        }
+
         var valueState by remember {
             mutableStateOf("Đang điều trị")
         }
+
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 SetLayoutRadioButton(title = "Đang điều trị", valueState) {
+                    filter = 0
                     valueState = it
+                    clickFilter(filter)
                 }
                 SetLayoutRadioButton(title = "Xem tất cả", valueState) {
                     valueState = it
+                    filter = 1
+                    clickFilter(filter)
                 }
 
             }
@@ -124,18 +134,11 @@ fun SetLayoutRadioButton(title: String, valueState: String, onClick: (String) ->
 }
 
 @Composable
-fun SetBodyListPatient(onClickListener: (UserDto) -> Unit) {
-    val listPatientInfo by remember {
-        mutableStateOf(
-            listOf<UserDto>(
-                UserDto(name = "Nguyễn văn Huy"),
-                UserDto(name = "Nguyễn văn Huy"),
-                UserDto(name = "Nguyễn văn Huy"),
-            )
-        )
-    }
+fun SetBodyListPatient(onClickListener: (Patient) -> Unit,listUser: State<List<Patient>>) {
+
+
     LazyColumn(contentPadding = PaddingValues(bottom = 16.dp), content = {
-        items(listPatientInfo) { item ->
+        items(listUser.value) { item ->
             SetLayoutItemPatient(patient = item, Modifier.clickable {
                 onClickListener(item)
             })
@@ -144,7 +147,7 @@ fun SetBodyListPatient(onClickListener: (UserDto) -> Unit) {
 }
 
 @Composable
-fun SetLayoutItemPatient(patient: UserDto, modifier: Modifier) {
+fun SetLayoutItemPatient(patient: Patient, modifier: Modifier) {
     Card(
         modifier = Modifier
 
@@ -179,7 +182,7 @@ fun SetLayoutItemPatient(patient: UserDto, modifier: Modifier) {
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = "P. Vạn Mỹ, Q. Ngô Quyền, Hải Phòng",
+                    text = patient.address?:"",
                     style = styleText
                 )
             }

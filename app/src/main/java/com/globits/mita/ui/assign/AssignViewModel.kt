@@ -2,6 +2,8 @@ package com.globits.mita.ui.assign
 
 import com.airbnb.mvrx.*
 import com.globits.mita.core.MitaViewModel
+import com.globits.mita.data.model.Patient
+import com.globits.mita.data.model.PatientFilter
 import com.globits.mita.data.repository.TestRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,19 +16,27 @@ class AssignViewModel @AssistedInject constructor(
 ) :
     MitaViewModel<AssignViewState, AssignViewAction, AssignViewEvent>(state) {
     init {
-        handleGetUsers()
+        getPatients(PatientFilter("",1,10,0))
     }
 
     override fun handle(action: AssignViewAction) {
         when (action) {
-            is AssignViewAction.GetUsers -> handleGetUsers()
+            is AssignViewAction.GetPatients -> getPatients(action.patientFilter)
+            is AssignViewAction.SetPatientDetail -> setPatientDetail(action.patient)
+            else ->{}
         }
     }
 
-    private fun handleGetUsers() {
-        setState { copy(asyncUsers = Loading()) }
-        repository.getCurrentUser().execute {
-            copy(asyncUsers = it)
+    private fun setPatientDetail(patient: Patient) {
+        setState { copy(patient=patient)}
+    }
+
+    private fun getPatients(patientFilter: PatientFilter) {
+        setState {
+            copy(asyncPatients= Loading())
+        }
+        repository.getPatient(patientFilter).execute {
+            copy(asyncPatients = it)
         }
     }
 

@@ -1,15 +1,24 @@
 package com.globits.mita.ui.nursing
 
 import android.os.Bundle
+import com.globits.mita.MitaApplication
 import com.globits.mita.R
 import com.globits.mita.core.MitaBaseActivity
 import com.globits.mita.databinding.ActivityNursingBinding
+import com.globits.mita.ui.pacs.PacsViewModel
 import com.globits.mita.ui.patients.PatientInfoFragment
 import com.globits.mita.utils.addFragment
 import com.globits.mita.utils.addFragmentToBackstack
+import javax.inject.Inject
 
-class NursingActivity : MitaBaseActivity<ActivityNursingBinding>() {
+class NursingActivity : MitaBaseActivity<ActivityNursingBinding>(),NursingViewModel.Factory {
+
+
+    @Inject
+    lateinit var viewModelFactory: NursingViewModel.Factory
+
     override fun getBinding(): ActivityNursingBinding {
+        (applicationContext as MitaApplication).mitaComponent.inject(this)
         return ActivityNursingBinding.inflate(layoutInflater)
     }
 
@@ -29,6 +38,10 @@ class NursingActivity : MitaBaseActivity<ActivityNursingBinding>() {
 
     fun removeBackStack() {
         supportFragmentManager.popBackStack()
+    }
+
+    override fun create(initialState: NursingViewState): NursingViewModel {
+        return viewModelFactory.create(initialState)
     }
 
 

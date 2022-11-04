@@ -2,7 +2,10 @@ package com.globits.mita.ui.treatment
 
 import com.airbnb.mvrx.*
 import com.globits.mita.core.MitaViewModel
+import com.globits.mita.data.model.Patient
+import com.globits.mita.data.model.PatientFilter
 import com.globits.mita.data.repository.TestRepository
+import com.globits.mita.ui.pacs.PacsViewAction
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -14,21 +17,31 @@ class TreatmentViewModel @AssistedInject constructor(
 ) :
     MitaViewModel<TreatmentViewState, TreatmentViewAction, TreatmentViewEvent>(state) {
     init {
-        handleGetUsers()
+        getPatients(PatientFilter("",1,10,0))
     }
 
     override fun handle(action: TreatmentViewAction) {
         when (action) {
-            is TreatmentViewAction.GetUsers -> handleGetUsers()
+            is TreatmentViewAction.GetPatients -> getPatients(action.patientFilter)
+            is TreatmentViewAction.SetPatientDetail -> setPatientDetail(action.patient)
+            else -> {}
         }
     }
 
-    private fun handleGetUsers() {
-        setState { copy(asyncUsers = Loading()) }
-        repository.getCurrentUser().execute {
-            copy(asyncUsers = it)
+    private fun setPatientDetail(patient: Patient) {
+        setState { copy(patient=patient)}
+    }
+
+    private fun getPatients(patientFilter: PatientFilter) {
+        setState {
+            copy(asyncPatients= Loading())
+        }
+        repository.getPatient(patientFilter).execute {
+            copy(asyncPatients = it)
         }
     }
+
+
 
 
     @AssistedFactory

@@ -1,6 +1,9 @@
 package com.globits.mita.ui.pacs.view
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
-import com.globits.mita.data.network.UserDto
+import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
 import com.globits.mita.ui.theme.*
 import com.globits.mita.ui.treatment.view.Doc
@@ -36,12 +39,12 @@ import java.util.*
 @Composable
 fun DefaultPreviewPatientInfo() {
     SetLayoutPatientInfoPacs(onBackStack = {
-    }, onClick = {})
+    }, onClick = {}, patient = Patient())
 }
 
 
 @Composable
-fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit,onClick: () -> Unit) {
+fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit, onClick: () -> Unit, patient: Patient) {
     Column(
         Modifier
             .background(Color.White)
@@ -56,7 +59,7 @@ fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit,onClick: () -> Unit) {
                         .height(92.dp)
                 ) {}
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                    SetLayoutItemPatient(patient = UserDto("", "", "", 0), Modifier)
+                    SetLayoutItemPatient(patient = patient,Modifier)
                 }
             }
             SetLayoutListDocument()
@@ -97,14 +100,14 @@ fun SetLayoutListDocument(onClick: () -> Unit) {
 }
 
 @Composable
-fun SetLayoutItemDoc(item: Doc,onClick:()->Unit) {
+fun SetLayoutItemDoc(item: Doc, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .padding(top = 16.dp)
             .border(
                 width = 1.dp, color = STROKE_BTN_FEATURE, RoundedCornerShape(12.dp)
             )
-            .clip(shape =RoundedCornerShape(12.dp) )
+            .clip(shape = RoundedCornerShape(12.dp))
             .fillMaxWidth()
             .clickable {
                 onClick()

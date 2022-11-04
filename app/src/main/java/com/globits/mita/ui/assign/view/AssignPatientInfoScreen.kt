@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
-import com.globits.mita.data.network.UserDto
+import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
 import com.globits.mita.ui.theme.*
 import com.globits.mita.ui.treatment.view.SetLayoutDiagnostic
@@ -30,11 +30,11 @@ import com.globits.mita.utils.formatNumber
 @Preview
 @Composable
 fun DefaultPreviewPatientInfoAssign() {
-    SetLayoutPatientInfoAssign(onBackStack = {}, UserDto(name = "Nguyễn văn Huy"))
+    SetLayoutPatientInfoAssign(onBackStack = {}, Patient(displayName = "Nguyễn văn Huy"))
 }
 
 @Composable
-fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit, userDto: UserDto) {
+fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit, patient: Patient) {
     MaterialTheme {
         Column(
             Modifier
@@ -55,7 +55,7 @@ fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit, userDto: UserDto) {
                             .height(92.dp)
                     ) {}
                     Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp)) {
-                        SetLayoutItemPatient(patient = userDto, Modifier)
+                        SetLayoutItemPatient(patient = patient, Modifier)
                     }
                 }
                 SetLayoutDiagnostic()
