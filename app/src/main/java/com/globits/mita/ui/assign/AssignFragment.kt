@@ -20,6 +20,8 @@ class AssignFragment : MitaBaseFragment() {
 
     val viewModel: AssignViewModel by activityViewModel()
 
+    var valueState = mutableStateOf("Đang điều trị")
+
     var _listUser = mutableStateOf<List<Patient>>(mutableListOf())
     private val listUser: State<List<Patient>> = _listUser
 
@@ -27,14 +29,18 @@ class AssignFragment : MitaBaseFragment() {
     override fun SetLayout() {
 
         SetLayoutListPatientFragmentAssign(onClickListener = {
-            (activity as AssignActivity).addFragmentInfoPatient()
             viewModel.handle(AssignViewAction.SetPatientDetail(it))
+            (activity as AssignActivity).addFragmentInfoPatient()
+
         }, onBackStack = {
             (activity as AssignActivity).finish()
         }, listUser = listUser,
             getPatient = {
                 viewModel.handle(AssignViewAction.GetPatients(PatientFilter("", 1, 10, it)))
-            })
+                valueState.value = if (it == 0) "Xem tất cả" else "Đang điều trị"
+            },
+            valueState = valueState
+        )
 
 
     }

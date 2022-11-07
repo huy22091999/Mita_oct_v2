@@ -21,6 +21,8 @@ class NursingFragment : MitaBaseFragment() {
 
     val viewModel: NursingViewModel by activityViewModel()
 
+    var valueState = mutableStateOf("Đang điều trị")
+
     var _listUser = mutableStateOf<List<Patient>>(mutableListOf())
     private val listUser: State<List<Patient>> = _listUser
 
@@ -39,8 +41,10 @@ class NursingFragment : MitaBaseFragment() {
                         PatientFilter("", 1, 10, it)
                     )
                 )
+                valueState.value = if (it == 0) "Xem tất cả" else "Đang điều trị"
             },
-            listUser
+            listUser,
+            valueState
         )
     }
 

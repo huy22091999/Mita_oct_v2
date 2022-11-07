@@ -19,6 +19,8 @@ class PacsFragment @Inject constructor() : MitaBaseFragment() {
 
     val viewModel: PacsViewModel by activityViewModel()
 
+    var valueState = mutableStateOf("Đang điều trị")
+
     var _listUser = mutableStateOf<List<Patient>>(mutableListOf())
     private val listUser: State<List<Patient>> = _listUser
 
@@ -31,7 +33,9 @@ class PacsFragment @Inject constructor() : MitaBaseFragment() {
             (activity as PacsActivity).addFragmentInfoPatient()
         }, listUser = listUser, getPatient = {
             viewModel.handle(PacsViewAction.GetPatients(PatientFilter("", 1, 10, it)))
-        }
+            valueState.value = if (it == 0) "Xem tất cả" else "Đang điều trị"
+        },
+            valueState = valueState
         )
     }
 

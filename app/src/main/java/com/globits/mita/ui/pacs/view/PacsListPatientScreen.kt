@@ -31,6 +31,9 @@ fun DefaultPreviewListPatient() {
     }, listUser = listUser,
         getPatient = {
 
+        },
+        valueState = remember {
+            mutableStateOf("")
         }
     )
 

@@ -10,16 +10,17 @@ import com.airbnb.mvrx.withState
 import com.globits.mita.core.MitaBaseFragment
 import com.globits.mita.data.model.Patient
 import com.globits.mita.data.model.PatientFilter
-import com.globits.mita.ui.assign.AssignViewAction
 import com.globits.mita.ui.nursing.view.SetLayoutListPatientFragment
-import com.globits.mita.ui.pacs.PacsViewAction
-import com.globits.mita.ui.pacs.PacsViewModel
-import com.globits.mita.ui.pacs.PacsViewState
 import com.globits.mita.utils.snackbar
 
 
 class TreatmentFragment : MitaBaseFragment() {
+
+
+
     val viewModel: TreatmentViewModel by activityViewModel()
+
+    var valueState = mutableStateOf("Đang điều trị")
 
     var _listUser = mutableStateOf<List<Patient>>(mutableListOf())
     private val listUser: State<List<Patient>> = _listUser
@@ -36,8 +37,10 @@ class TreatmentFragment : MitaBaseFragment() {
                         PatientFilter("", 1, 10, it)
                     )
                 )
+                valueState.value = if (it == 0) "Xem tất cả" else "Đang điều trị"
             },
-            listUser
+            listUser,
+            valueState
         )
 
     }
@@ -46,6 +49,7 @@ class TreatmentFragment : MitaBaseFragment() {
     override fun invalidate() = withState(viewModel) {
         updateState(it)
     }
+
     private fun updateState(it: TreatmentViewState) {
         when (it.asyncPatients) {
             is Success -> {

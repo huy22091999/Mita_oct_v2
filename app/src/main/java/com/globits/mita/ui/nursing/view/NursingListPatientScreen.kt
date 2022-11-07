@@ -36,6 +36,8 @@ fun DefaultPreviewListPatient() {
 }
 
 
+
+
 @Composable
 fun SetUpToolbarLayoutLight(onBackStack: () -> Unit) {
     TopAppBar(
@@ -79,7 +81,8 @@ fun SetUpToolbarLayoutLight(onBackStack: () -> Unit) {
 }
 
 @Composable
-fun SetHeaderListPatient(clickFilter:(filter:Int)->Unit) {
+fun SetHeaderListPatient(valueState : MutableState<String>,clickFilter:(filter:Int)->Unit
+) {
     Column {
         SetLayoutSearch(title = "Tìm kiếm bệnh nhân") {
         }
@@ -88,23 +91,18 @@ fun SetHeaderListPatient(clickFilter:(filter:Int)->Unit) {
             mutableStateOf(1)
         }
 
-        var valueState by remember {
-            mutableStateOf("Đang điều trị")
-        }
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                SetLayoutRadioButton(title = "Đang điều trị", valueState) {
-                    filter = 0
-                    valueState = it
+                SetLayoutRadioButton(title = "Đang điều trị", valueState.value) {
+                    filter = 1
                     clickFilter(filter)
                 }
-                SetLayoutRadioButton(title = "Xem tất cả", valueState) {
-                    valueState = it
-                    filter = 1
+                SetLayoutRadioButton(title = "Xem tất cả", valueState.value) {
+                    filter = 0
                     clickFilter(filter)
                 }
 

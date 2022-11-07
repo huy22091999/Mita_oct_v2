@@ -36,6 +36,7 @@ import java.util.Calendar.getInstance
 @Preview
 @Composable
 fun DefaultListPatient() {
+
     var listUser: MutableState<List<Patient>> = remember {
         mutableStateOf<List<Patient>>(
             mutableListOf(
@@ -50,7 +51,10 @@ fun DefaultListPatient() {
 
     }, onBackStack = {
 
-    }, listUser = listUser, getPatient = {})
+    }, listUser = listUser, getPatient = {}, valueState = remember {
+        mutableStateOf("Đang điều trị")
+    }
+    )
 }
 
 @Composable
@@ -58,7 +62,8 @@ fun SetLayoutListPatientFragmentAssign(
     listUser: State<List<Patient>>?,
     onClickListener: (Patient) -> Unit,
     onBackStack: () -> Unit,
-    getPatient: (filter: Int) -> Unit
+    getPatient: (filter: Int) -> Unit,
+    valueState : MutableState<String>
 ) {
 
 
@@ -69,7 +74,7 @@ fun SetLayoutListPatientFragmentAssign(
     ) {
         SetUpToolbarLayoutLight(onBackStack = onBackStack)
 
-        SetHeaderListPatient()
+        SetHeaderListPatient(valueState)
         {
             getPatient(it)
         }
@@ -127,7 +132,7 @@ fun SetLayoutItemPatientAssign(patient: Patient, modifier: Modifier) {
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = "#ACC: ${patient.diagnostic}",
+                    text = "#ACC:${patient.documents?.get(0)?.name}",
                     style = styleText
                 )
             }
@@ -214,12 +219,12 @@ fun SetLayoutPatientInfoItem(patient: Patient) {
                 )
                 Text(
                     text = buildAnnotatedString {
-                        append(if (patient.status == 0) "\u2022 Đang điều trị" else "\u2022 Kết thúc điều trị")
+                        append(if (patient.status == 1) "\u2022 Đang điều trị" else "\u2022 Kết thúc điều trị")
 
                     }, modifier = Modifier.constrainAs(status) {
                         start.linkTo(dob.end)
                         end.linkTo(parent.end)
-                    }, fontSize = 10.sp, color = if(patient.status == 0 ) TEXT_STATUS else ICON_LOCATION,
+                    }, fontSize = 10.sp, color = if(patient.status == 1 ) TEXT_STATUS else ICON_LOCATION,
                     style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_regular)))
                 )
             }

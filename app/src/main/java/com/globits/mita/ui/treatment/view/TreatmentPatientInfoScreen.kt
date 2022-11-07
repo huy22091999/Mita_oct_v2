@@ -67,7 +67,7 @@ fun SetLayoutPatientInfo(
                 }
             }
             // chuẩn đoán
-            SetLayoutDiagnostic()
+            SetLayoutDiagnostic(patient)
             // danh sách chức năng
             SetUpListFeatureLayout(isNursing, onPatientClick)
         }
@@ -77,7 +77,7 @@ fun SetLayoutPatientInfo(
 }
 
 @Composable
-fun SetLayoutDiagnostic() {
+fun SetLayoutDiagnostic(patient: Patient) {
     Column(Modifier.padding(start = 24.dp, end = 16.dp)) {
         Text(
             text = "Chuẩn đoán", fontSize = 17.sp,
@@ -86,7 +86,7 @@ fun SetLayoutDiagnostic() {
         )
         Text(
             modifier = Modifier.padding(top = 12.dp),
-            text = "A10 - Đau bụng chưa rõ nguyên nhân; J11 - Tăng huyết áp vô căn",
+            text = patient.diagnostic?:"",
             fontSize = 14.sp,
             color = TEXT_DOB,
             style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_regular)))

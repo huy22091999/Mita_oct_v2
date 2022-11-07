@@ -58,7 +58,7 @@ fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit, patient: Patient) {
                         SetLayoutItemPatient(patient = patient, Modifier)
                     }
                 }
-                SetLayoutDiagnostic()
+                SetLayoutDiagnostic(patient)
                 SetLayoutListAssign()
             }
         }

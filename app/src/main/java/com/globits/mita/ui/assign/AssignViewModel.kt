@@ -16,7 +16,7 @@ class AssignViewModel @AssistedInject constructor(
 ) :
     MitaViewModel<AssignViewState, AssignViewAction, AssignViewEvent>(state) {
     init {
-        getPatients(PatientFilter("",1,10,0))
+        getPatients(PatientFilter("",1,10,1))
     }
 
     override fun handle(action: AssignViewAction) {
@@ -35,8 +35,8 @@ class AssignViewModel @AssistedInject constructor(
         setState {
             copy(asyncPatients= Loading())
         }
-        repository.getPatient(patientFilter).execute {
-            copy(asyncPatients = it)
+        repository.getPatient(patientFilter).execute { patient ->
+            copy(asyncPatients = patient)
         }
     }
 

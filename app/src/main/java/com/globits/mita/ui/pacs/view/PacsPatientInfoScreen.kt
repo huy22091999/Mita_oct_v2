@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -27,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
+import com.globits.mita.data.model.Document
 import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
 import com.globits.mita.ui.theme.*
@@ -62,7 +64,7 @@ fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit, onClick: () -> Unit, patie
                     SetLayoutItemPatient(patient = patient,Modifier)
                 }
             }
-            SetLayoutListDocument()
+            SetLayoutListDocument(patient)
             {
                 onClick()
             }
@@ -71,17 +73,8 @@ fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit, onClick: () -> Unit, patie
 }
 
 @Composable
-fun SetLayoutListDocument(onClick: () -> Unit) {
-    val listDoc by remember {
-        mutableStateOf(
-            mutableListOf<Doc>(
-                Doc(
-                    "#ACC: 22344, Chụp cắt lớp vi tính khớp gối thẳng nghiêng 32 dãy", 6,
-                    Date()
-                ), Doc("#ACC: 22344, Chụp cắt lớp vi tính khớp gối thẳng nghiêng 32 dãy", 6, Date())
-            )
-        )
-    }
+fun SetLayoutListDocument(patient : Patient, onClick: () -> Unit) {
+
     Text(
         modifier = Modifier.padding(start = 24.dp, end = 24.dp),
         text = "Danh sách tài liệu", fontSize = 14.sp,
@@ -89,7 +82,7 @@ fun SetLayoutListDocument(onClick: () -> Unit) {
         style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_bold)))
     )
     LazyColumn(modifier = Modifier.padding(start = 20.dp, end = 20.dp)) {
-        items(listDoc) { item ->
+        items(patient.documents!!) { item ->
             SetLayoutItemDoc(item)
             {
                 onClick()
@@ -100,7 +93,7 @@ fun SetLayoutListDocument(onClick: () -> Unit) {
 }
 
 @Composable
-fun SetLayoutItemDoc(item: Doc, onClick: () -> Unit) {
+fun SetLayoutItemDoc(item: Document, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .padding(top = 16.dp)
@@ -138,13 +131,13 @@ fun SetLayoutItemDoc(item: Doc, onClick: () -> Unit) {
             Column {
                 item.name?.let {
                     Text(
-                        text = it, fontSize = 16.sp,
+                        text = "#ACC:${it}", fontSize = 16.sp,
                         color = BACKGROUND_TOOLBAR,
                         style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_semi_bold)))
                     )
                 }
                 Text(
-                    text = "${item.count} ảnh",
+                    text = "${item.images!!.size} ảnh",
                     modifier = Modifier.padding(top = 4.dp),
                     fontSize = 14.sp,
                     color = TEXT_COLOR_IMG_NUM,

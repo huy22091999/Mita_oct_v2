@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +25,8 @@ fun SetLayoutListPatientFragment(
     onClickListener: (Patient) -> Unit,
     onBackStack: () -> Unit,
     getPatient: (filter :Int ) -> Unit,
-    listUser: State<List<Patient>>
+    listUser: State<List<Patient>>,
+    valueState : MutableState<String>
 ) {
     Column(
         modifier = Modifier
@@ -32,7 +34,7 @@ fun SetLayoutListPatientFragment(
             .background(Color.White)
     ) {
         SetUpToolbarLayoutLight(onBackStack = onBackStack)
-        SetHeaderListPatient() {
+        SetHeaderListPatient(valueState =valueState ) {
             getPatient(it)
         }
         SetBodyListPatient(onClickListener,listUser)

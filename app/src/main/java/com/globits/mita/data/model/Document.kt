@@ -1,8 +1,6 @@
 package com.globits.mita.data.model
 
 import com.google.gson.annotations.SerializedName
-import java.sql.Date
-import java.util.*
 
 data class Document(
 
@@ -14,6 +12,10 @@ data class Document(
 
     @SerializedName("dateXRay")
     val dateXRay: java.util.Date? = null,
+
+    @SerializedName("images")
+    val images: List<String>? = null,
+
 
     @SerializedName("patient")
     val patient: Patient? = null,

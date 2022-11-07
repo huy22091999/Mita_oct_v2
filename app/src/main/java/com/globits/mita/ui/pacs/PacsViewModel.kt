@@ -17,7 +17,7 @@ class PacsViewModel @AssistedInject constructor(
 ) :
     MitaViewModel<PacsViewState, PacsViewAction, PacsViewEvent>(state) {
     init {
-        getPatients(PatientFilter("",1,10,0))
+        getPatients(PatientFilter("",1,10,1))
     }
 
     override fun handle(action: PacsViewAction) {

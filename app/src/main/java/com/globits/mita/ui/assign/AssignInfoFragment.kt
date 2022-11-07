@@ -9,6 +9,7 @@ import com.airbnb.mvrx.withState
 import com.globits.mita.core.MitaBaseFragment
 import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.assign.view.SetLayoutPatientInfoAssign
+import javax.inject.Inject
 
 
 class AssignInfoFragment : MitaBaseFragment() {

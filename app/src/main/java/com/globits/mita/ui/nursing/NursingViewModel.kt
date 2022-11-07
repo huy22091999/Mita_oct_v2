@@ -16,7 +16,7 @@ class NursingViewModel @AssistedInject constructor(
 ) :
     MitaViewModel<NursingViewState, NursingViewAction, NursingViewEvent>(state) {
     init {
-        getPatients(PatientFilter("",1,10,0))
+        getPatients(PatientFilter("",1,10,1))
     }
 
     override fun handle(action: NursingViewAction) {
