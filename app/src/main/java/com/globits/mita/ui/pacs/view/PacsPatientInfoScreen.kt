@@ -6,16 +6,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,8 +28,8 @@ import com.globits.mita.data.model.Document
 import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
 import com.globits.mita.ui.theme.*
-import com.globits.mita.ui.treatment.view.Doc
 import com.globits.mita.ui.treatment.view.SetUpToolbarLayout
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -46,7 +42,7 @@ fun DefaultPreviewPatientInfo() {
 
 
 @Composable
-fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit, onClick: () -> Unit, patient: Patient) {
+fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit, onClick: (document :Document) -> Unit, patient: Patient) {
     Column(
         Modifier
             .background(Color.White)
@@ -66,14 +62,14 @@ fun SetLayoutPatientInfoPacs(onBackStack: () -> Unit, onClick: () -> Unit, patie
             }
             SetLayoutListDocument(patient)
             {
-                onClick()
+                onClick(it)
             }
         }
     }
 }
 
 @Composable
-fun SetLayoutListDocument(patient : Patient, onClick: () -> Unit) {
+fun SetLayoutListDocument(patient : Patient, onClick: (document :Document) -> Unit) {
 
     Text(
         modifier = Modifier.padding(start = 24.dp, end = 24.dp),
@@ -82,18 +78,26 @@ fun SetLayoutListDocument(patient : Patient, onClick: () -> Unit) {
         style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_bold)))
     )
     LazyColumn(modifier = Modifier.padding(start = 20.dp, end = 20.dp)) {
-        items(patient.documents!!) { item ->
-            SetLayoutItemDoc(item)
-            {
-                onClick()
+        if (patient.documents != null)
+        {
+            items(patient.documents) { item ->
+                SetLayoutItemDoc(item)
+                {
+                    onClick(it)
+                }
             }
         }
+
 
     }
 }
 
 @Composable
-fun SetLayoutItemDoc(item: Document, onClick: () -> Unit) {
+fun SetLayoutItemDoc(item: Document, onClick: (document :Document) -> Unit) {
+
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy | hh.mm aa")
+    val formattedDate: String = dateFormat.format(item.dateXRay).toString()
+
     Row(
         modifier = Modifier
             .padding(top = 16.dp)
@@ -103,7 +107,7 @@ fun SetLayoutItemDoc(item: Document, onClick: () -> Unit) {
             .clip(shape = RoundedCornerShape(12.dp))
             .fillMaxWidth()
             .clickable {
-                onClick()
+                onClick(item)
             }
             .padding(16.dp), verticalAlignment = Alignment.CenterVertically
     ) {
@@ -131,20 +135,21 @@ fun SetLayoutItemDoc(item: Document, onClick: () -> Unit) {
             Column {
                 item.name?.let {
                     Text(
-                        text = "#ACC:${it}", fontSize = 16.sp,
+                        text = "#ACC: ${it}", fontSize = 16.sp,
                         color = BACKGROUND_TOOLBAR,
                         style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_semi_bold)))
                     )
                 }
                 Text(
-                    text = "${item.images!!.size} ảnh",
+                    text = if(item.images == null) "Không có ảnh" else "${item.images.size} ảnh",
+//                    text = "${item.images?.size} ảnh",
                     modifier = Modifier.padding(top = 4.dp),
                     fontSize = 14.sp,
                     color = TEXT_COLOR_IMG_NUM,
                     style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_regular)))
                 )
                 Text(
-                    text = "11/07/2022 | 02:00 PM",
+                    text = formattedDate,
                     modifier = Modifier.padding(top = 4.dp), fontSize =
                     16.sp,
                     color = TEXT_COLOR_IMG_TIME,

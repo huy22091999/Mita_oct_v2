@@ -1,19 +1,17 @@
-package com.globits.mita.ui.pacs
+package com.globits.mita.ui.patients
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import com.globits.mita.data.model.Document
 import com.globits.mita.data.model.Page
 import com.globits.mita.data.model.Patient
 import com.globits.mita.data.model.Responsive
 
-data class PacsViewState(
+data class PatientViewState(
     var asyncUsers: Async<Responsive<List<Patient>>> = Uninitialized,
     var asyncPatients: Async<Page<Patient>> = Uninitialized,
-    var patient: Patient? = null,
-    var document: Document? = null
+    var patient: Patient? = null
 ) : MvRxState {
     fun isLoading() = asyncUsers is Loading
 }

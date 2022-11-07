@@ -1,6 +1,8 @@
 package com.globits.mita.ui.pacs
 
 import android.os.Bundle
+import android.widget.SeekBar
+import androidx.compose.material.Snackbar
 import com.globits.mita.MitaApplication
 import com.globits.mita.R
 import com.globits.mita.core.MitaBaseActivity
@@ -9,6 +11,7 @@ import com.globits.mita.ui.assign.AssignViewModel
 import com.globits.mita.ui.assign.AssignViewState
 import com.globits.mita.utils.addFragment
 import com.globits.mita.utils.addFragmentToBackstack
+import com.globits.mita.utils.snackbar
 import javax.inject.Inject
 
 class PacsActivity : MitaBaseActivity<ActivityPacsBinding>(),PacsViewModel.Factory {
@@ -38,6 +41,11 @@ class PacsActivity : MitaBaseActivity<ActivityPacsBinding>(),PacsViewModel.Facto
 
     fun removeBackStack(){
         supportFragmentManager.popBackStack()
+    }
+
+    fun showSnackbar()
+    {
+       snackbar("Không có dữ liệu hiển thị")
     }
 
     override fun create(initialState: PacsViewState): PacsViewModel {

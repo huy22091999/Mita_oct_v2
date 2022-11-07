@@ -12,5 +12,5 @@ data class AssignViewState(
     var asyncPatients: Async<Page<Patient>> = Uninitialized,
     var patient: Patient? = null
 ) : MvRxState {
-    fun isLoading() = asyncUsers is Loading
+    fun isLoading() = asyncUsers is Loading || asyncPatients is Loading
 }

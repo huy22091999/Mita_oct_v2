@@ -1,43 +1,29 @@
-package com.globits.mita.ui.pacs
+package com.globits.mita.ui.patients
 
 import com.airbnb.mvrx.*
 import com.globits.mita.core.MitaViewModel
-import com.globits.mita.data.model.Document
 import com.globits.mita.data.model.Patient
 import com.globits.mita.data.model.PatientFilter
 import com.globits.mita.data.repository.TestRepository
-import com.globits.mita.ui.assign.AssignViewAction
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
 
-class PacsViewModel @AssistedInject constructor(
-    @Assisted state: PacsViewState,
+class PatientViewModel @AssistedInject constructor(
+    @Assisted state: PatientViewState,
     val repository: TestRepository
 ) :
-    MitaViewModel<PacsViewState, PacsViewAction, PacsViewEvent>(state) {
+    MitaViewModel<PatientViewState, PatientViewAction, PatientViewEvent>(state) {
     init {
         getPatients(PatientFilter("",1,10,1))
     }
 
-    override fun handle(action: PacsViewAction) {
+    override fun handle(action: PatientViewAction) {
         when (action) {
-            is PacsViewAction.GetPatients -> getPatients(action.patientFilter)
-            is PacsViewAction.SetPatientDetail -> setPatientDetail(action.patient)
-            is PacsViewAction.SetDocument -> setDocument(action.document)
+            is PatientViewAction.GetLabtest -> {}
             else -> {}
         }
-    }
-
-    private fun setDocument(document: Document) {
-        setState { copy(document  =document)}
-    }
-
-
-
-    private fun setPatientDetail(patient: Patient) {
-        setState { copy(patient=patient)}
     }
 
     private fun getPatients(patientFilter: PatientFilter) {
@@ -50,17 +36,19 @@ class PacsViewModel @AssistedInject constructor(
     }
 
 
+
+
     @AssistedFactory
     interface Factory {
-        fun create(initialState: PacsViewState): PacsViewModel
+        fun create(initialState: PatientViewState): PatientViewModel
     }
 
-    companion object : MvRxViewModelFactory<PacsViewModel, PacsViewState> {
+    companion object : MvRxViewModelFactory<PatientViewModel, PatientViewState> {
         @JvmStatic
         override fun create(
             viewModelContext: ViewModelContext,
-            state: PacsViewState
-        ): PacsViewModel {
+            state: PatientViewState
+        ): PatientViewModel {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory

@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.globits.mita.R
+import com.globits.mita.data.model.Document
 import com.globits.mita.ui.theme.BACKGROUND_IMAGE
 import com.globits.mita.ui.theme.BODER_ICON
 import com.globits.mita.ui.theme.ICON_IMAGE
@@ -40,20 +39,17 @@ import kotlinx.coroutines.launch
 @Preview
 @Composable
 fun DefaultViewImage() {
-    ImageScreen()
+    ImageScreen(document = Document())
     {}
 }
 
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun ImageScreen(onBack:() ->Unit) {
+fun ImageScreen(document: Document, onBack: () -> Unit) {
 
     val pagerState = rememberPagerState(
-        pageCount = 4,
-        initialOffscreenLimit = 4,
-        infiniteLoop = true,
-        initialPage = 0,
+        pageCount = document.images?.size ?: 0,
     )
 
     var scale by remember { mutableStateOf(1f) }
@@ -67,7 +63,7 @@ fun ImageScreen(onBack:() ->Unit) {
     ) {
 
         Text(
-            text = "Hình ảnh ${pagerState.currentPage +1}/4",
+            text = "Hình ảnh ${pagerState.currentPage + 1}/${document.images?.size}",
             fontSize = 14.sp,
             color = TEXT_IMAGE,
             modifier = Modifier.padding(bottom = 5.dp)
@@ -87,14 +83,11 @@ fun ImageScreen(onBack:() ->Unit) {
                         scaleY = scale
                     ),
                 model =
-                    when (page) {
-                        0 -> "http://192.168.0.157:8020/mita/public/images/img.png"
-                        1 -> "http://192.168.0.157:8020/mita/public/images/img.png"
-                        2 -> "http://192.168.0.157:8020/mita/public/images/img.png"
-                        3 -> "http://192.168.0.157:8020/mita/public/images/img.png"
-                        else -> throw IllegalStateException("image not provided for page $page")
-                    }
-                , contentDescription = null
+                when (page) {
+                    page -> "http://192.168.0.157:8020/mita/public/images/${document.images?.get(page)}"
+
+                    else -> throw IllegalStateException("image not provided for page $page")
+                }, contentDescription = null
             )
             {
                 it.thumbnail()
@@ -120,18 +113,22 @@ fun ImageScreen(onBack:() ->Unit) {
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(0.5f)
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
                         .clickable(
-                            interactionSource = remember { MutableInteractionSource() } ,
+                            interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) {
                             GlobalScope.launch {
-                                pagerState.scrollToPage(pagerState.currentPage-1)
+                                pagerState.scrollToPage(pagerState.currentPage - 1)
                             }
                         },
                     horizontalArrangement = Arrangement.Start
                 ) {
-                    Image(painter = painterResource(id = R.drawable.img_back), contentDescription = "")
+                    Image(
+                        painter = painterResource(id = R.drawable.img_back),
+                        contentDescription = ""
+                    )
                     Text(
                         text = "Trước",
                         fontSize = 14.sp,
@@ -143,7 +140,7 @@ fun ImageScreen(onBack:() ->Unit) {
 
 
             AnimatedVisibility(
-                visible = pagerState.currentPage != 3,
+                visible = pagerState.currentPage + 1 != document.images?.size,
                 enter = fadeIn(
                     // Overwrites the initial value of alpha to 0.4f for fade in, 0 by default
                     initialAlpha = 0.4f
@@ -154,27 +151,31 @@ fun ImageScreen(onBack:() ->Unit) {
                 )
             ) {
                 Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(1f)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() } ,
-                        indication = null
-                    ) {
-                        GlobalScope.launch {
-                            pagerState.scrollToPage(pagerState.currentPage+1)
-                        }
-                    },
-                horizontalArrangement = Arrangement.End,
-            ) {
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            GlobalScope.launch {
+                                pagerState.scrollToPage(pagerState.currentPage + 1)
+                            }
+                        },
+                    horizontalArrangement = Arrangement.End,
+                ) {
 
-                Text(
-                    text = "Sau",
-                    fontSize = 14.sp,
-                    color = TEXT_IMAGE,
-                    modifier = Modifier.padding(end = 5.dp)
-                )
-                Image(painter = painterResource(id = R.drawable.img_next), contentDescription = "")
-            }
+                    Text(
+                        text = "Sau",
+                        fontSize = 14.sp,
+                        color = TEXT_IMAGE,
+                        modifier = Modifier.padding(end = 5.dp)
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.img_next),
+                        contentDescription = ""
+                    )
+                }
             }
 
         }
@@ -187,12 +188,12 @@ fun ImageScreen(onBack:() ->Unit) {
                 .clip(shape = RoundedCornerShape(21.dp))
                 .background(color = ICON_IMAGE)
                 .clickable {
-                           onBack()
+                    onBack()
                 },
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-                Image(painter = painterResource(id = R.drawable.img_close), contentDescription ="" )
+            Image(painter = painterResource(id = R.drawable.img_close), contentDescription = "")
         }
 
 
