@@ -32,8 +32,13 @@ class NursingActivity : MitaBaseActivity<ActivityNursingBinding>(),NursingViewMo
         addFragmentToBackstack(R.id.container, NursingFragmentInfoPatient::class.java, null)
     }
 
-    fun addFragmentPatient() {
-        addFragmentToBackstack(R.id.container, PatientInfoFragment::class.java, null)
+    fun addFragmentPatient(patientId :Int) {
+
+        var patientFragment = PatientInfoFragment()
+        val args = Bundle()
+        args.putInt("patientId", patientId)
+        patientFragment.arguments = args
+        supportFragmentManager.beginTransaction().replace(R.id.container,patientFragment).addToBackStack(null).commit()
     }
 
     fun removeBackStack() {

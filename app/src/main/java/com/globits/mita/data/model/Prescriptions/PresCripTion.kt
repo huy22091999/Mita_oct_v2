@@ -6,7 +6,7 @@ import java.util.*
 data class PresCripTion (
 
     @SerializedName("id")
-    val id: Int? = null,
+    val id: Long? = null,
 
     @SerializedName("doctorSpecified")
     val doctorSpecified: String? = null,

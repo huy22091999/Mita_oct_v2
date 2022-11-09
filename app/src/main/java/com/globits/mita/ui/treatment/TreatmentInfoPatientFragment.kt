@@ -1,13 +1,14 @@
 package com.globits.mita.ui.treatment
 
+import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.globits.mita.core.MitaBaseFragment
 import com.globits.mita.data.model.Patient
-import com.globits.mita.ui.assign.AssignViewModel
 import com.globits.mita.ui.treatment.view.SetLayoutPatientInfo
+
 
 class TreatmentInfoPatientFragment : MitaBaseFragment() {
 
@@ -20,7 +21,10 @@ class TreatmentInfoPatientFragment : MitaBaseFragment() {
         SetLayoutPatientInfo("Thông tin bệnh nhân",
             false,
             onBackStack = { (activity as TreatmentActivity).removeBackStack() },
-            onPatientClick = { (activity as TreatmentActivity).addFragmentPatient() },
+            onPatientClick = {
+               var patientId = it.id!!.toInt()
+                (activity as TreatmentActivity).addFragmentPatient(patientId)
+                             },
         patient = patient.value)
     }
 

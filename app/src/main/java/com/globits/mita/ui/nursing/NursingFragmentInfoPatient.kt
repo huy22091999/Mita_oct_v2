@@ -8,7 +8,6 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.globits.mita.core.MitaBaseFragment
 import com.globits.mita.data.model.Patient
-import com.globits.mita.ui.assign.AssignViewModel
 import com.globits.mita.ui.treatment.view.SetLayoutPatientInfo
 
 class NursingFragmentInfoPatient : MitaBaseFragment() {
@@ -21,7 +20,10 @@ class NursingFragmentInfoPatient : MitaBaseFragment() {
     override fun SetLayout() {
         SetLayoutPatientInfo("Thông tin bệnh nhân", true, onBackStack = {
             (activity as NursingActivity).removeBackStack()
-        }, onPatientClick = { (activity as NursingActivity).addFragmentPatient() },
+        }, onPatientClick = {
+            var patientId = it.id!!.toInt()
+            (activity as NursingActivity).addFragmentPatient(patientId)
+        },
             patient = patient.value
         )
 

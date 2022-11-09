@@ -42,7 +42,7 @@ fun DefaultPreviewPatientInfo() {
 fun SetLayoutPatientInfo(
     textTitle: String,
     isNursing: Boolean,
-    onPatientClick: () -> Unit,
+    onPatientClick: (patient: Patient) -> Unit,
     onBackStack: () -> Unit,
     patient: Patient
 ) {
@@ -69,7 +69,10 @@ fun SetLayoutPatientInfo(
             // chuẩn đoán
             SetLayoutDiagnostic(patient)
             // danh sách chức năng
-            SetUpListFeatureLayout(isNursing, onPatientClick)
+            SetUpListFeatureLayout(isNursing)
+            {
+                onPatientClick(patient)
+            }
         }
 
 

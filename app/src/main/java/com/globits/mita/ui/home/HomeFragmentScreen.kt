@@ -10,15 +10,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,13 +38,17 @@ import java.util.*
 @Preview
 @Composable
 fun DefaultPreview() {
-//    setLayoutFragment(
-//        requireContext = null,
-//        onClickListNursing = {},
-//        onClickListAssign = {},
-//        onClickListPacs = {},
-//        onClickListTreatment = {},
-//    )
+    var user: MutableState<User> = remember {
+        mutableStateOf(User())
+    }
+    setLayoutFragment(
+        requireContext = null,
+        onClickListNursing = {},
+        onClickListAssign = {},
+        onClickListPacs = {},
+        onClickListTreatment = {},
+        user = user
+    )
 }
 
 @Composable
@@ -49,7 +58,7 @@ fun setLayoutFragment(
     onClickListTreatment: () -> Unit,
     onClickListPacs: () -> Unit,
     onClickListAssign: () -> Unit,
-    user : MutableState<User>
+    user: MutableState<User>
 ) {
     MaterialTheme {
         Column(
@@ -74,7 +83,8 @@ fun setLayoutFragment(
 }
 
 @Composable
-fun setLayoutHeader(user : MutableState<User>
+fun setLayoutHeader(
+    user: MutableState<User>
 ) {
     val nameRemember by remember { mutableStateOf("Trang") }
     Column {
@@ -141,8 +151,12 @@ fun setLayoutHeader(user : MutableState<User>
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SetLayoutSearch(title: String, onClickSearch: () -> Unit) {
+
+    var keyboardController = LocalSoftwareKeyboardController.current
+
     var textSearch by remember {
         mutableStateOf("")
     }
@@ -180,7 +194,15 @@ fun SetLayoutSearch(title: String, onClickSearch: () -> Unit) {
         ),
         shape = RoundedCornerShape(16.dp),
         leadingIcon = iconStart,
-        trailingIcon = iconEnd
+        trailingIcon = iconEnd,
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                keyboardController?.hide()
+            },
+        )
     )
 }
 

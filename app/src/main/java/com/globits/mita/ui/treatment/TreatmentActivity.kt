@@ -5,7 +5,7 @@ import com.globits.mita.MitaApplication
 import com.globits.mita.R
 import com.globits.mita.core.MitaBaseActivity
 import com.globits.mita.databinding.ActivityTreatmentBinding
-import com.globits.mita.ui.pacs.PacsViewModel
+
 import com.globits.mita.ui.patients.PatientInfoFragment
 import com.globits.mita.utils.addFragment
 import com.globits.mita.utils.addFragmentToBackstack
@@ -29,8 +29,14 @@ class TreatmentActivity : MitaBaseActivity<ActivityTreatmentBinding>(),Treatment
     fun addFragmentInfoPatient(){
         addFragmentToBackstack(R.id.container,TreatmentInfoPatientFragment::class.java)
     }
-    fun addFragmentPatient(){
-        addFragmentToBackstack(R.id.container, PatientInfoFragment::class.java, null)
+    fun addFragmentPatient(patientId :Int){
+
+        var patientFragment = PatientInfoFragment()
+        val args = Bundle()
+        args.putInt("patientId", patientId)
+        patientFragment.arguments = args
+        supportFragmentManager.beginTransaction().replace(R.id.container,patientFragment).addToBackStack(null).commit()
+
     }
     fun removeBackStack(){
         supportFragmentManager.popBackStack()

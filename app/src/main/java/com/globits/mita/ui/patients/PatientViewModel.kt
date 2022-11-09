@@ -16,25 +16,44 @@ class PatientViewModel @AssistedInject constructor(
 ) :
     MitaViewModel<PatientViewState, PatientViewAction, PatientViewEvent>(state) {
     init {
-        getPatients(PatientFilter("",1,10,1))
+
     }
 
     override fun handle(action: PatientViewAction) {
         when (action) {
-            is PatientViewAction.GetLabtest -> {}
+            is PatientViewAction.GetLabTest -> getLabTest(action.patientId)
+            is PatientViewAction.GetLabTestXRay -> getLabTestXRay(action.patientId)
+            is PatientViewAction.GetPrescription -> getPrescription(action.patientId)
             else -> {}
         }
     }
 
-    private fun getPatients(patientFilter: PatientFilter) {
+    private fun getPrescription(patientId: Int) {
         setState {
-            copy(asyncPatients= Loading())
+            copy(asyncPresentation= Loading())
         }
-        repository.getPatient(patientFilter).execute {
-            copy(asyncPatients = it)
+        repository.getPrescription(patientId).execute {
+            copy(asyncPresentation = it)
         }
     }
 
+    private fun getLabTestXRay(patientId: Int) {
+        setState {
+            copy(asyncLabTestXRay = Loading())
+        }
+        repository.getLabTestXRay(patientId).execute {
+            copy(asyncLabTestXRay = it)
+        }
+    }
+
+    private fun getLabTest(patientId: Int) {
+        setState {
+            copy(asyncLabTest= Loading())
+        }
+        repository.getLabTest(patientId).execute {
+            copy(asyncLabTest = it)
+        }
+    }
 
 
 

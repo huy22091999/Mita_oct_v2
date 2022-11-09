@@ -5,7 +5,7 @@ import java.util.*
 
 data class LabTest(
     @SerializedName("id")
-    val id: Int? = null,
+    val id: Long? = null,
 
     @SerializedName("heathOrganization")
     val heathOrganization: String? = null,

@@ -2,10 +2,10 @@ package com.globits.mita.data.model.LabTestXray
 
 import com.google.gson.annotations.SerializedName
 
-data class LabTestItemXRayItemDetail (
+data class LabTestXRayItemDetail (
 
     @SerializedName("id")
-    val id: Int? = null,
+    val id: Long? = null,
 
     @SerializedName("name")
     val name: String? = null,
