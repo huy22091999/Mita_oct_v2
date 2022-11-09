@@ -43,8 +43,6 @@ fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit, patient: Patient) {
             SetUpToolbarLayout("Thông tin bệnh nhân", onBackStack)
             Column(
                 Modifier
-//                    .fillMaxHeight()
-//                    .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
                 Box {
@@ -155,11 +153,7 @@ fun SetLayoutListAssign() {
                 )
             )
         }
-//        LazyColumn(Modifier.padding(top = 16.dp)) {
-//            items(specials) { item ->
-//                SetLayoutItemSpecial(item)
-//            }
-//        }
+
         Column(Modifier.padding(top = 16.dp)) {
             for (item in specials) {
                 SetLayoutItemSpecial(item)
