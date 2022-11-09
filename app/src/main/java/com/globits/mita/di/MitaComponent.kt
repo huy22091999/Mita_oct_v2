@@ -8,6 +8,7 @@ import com.globits.mita.ui.MainActivity
 import com.globits.mita.ui.assign.AssignActivity
 import com.globits.mita.ui.nursing.NursingActivity
 import com.globits.mita.ui.pacs.PacsActivity
+import com.globits.mita.ui.patients.PatientInfoFragment
 import com.globits.mita.ui.security.LoginActivity
 import com.globits.mita.ui.treatment.TreatmentActivity
 
@@ -27,6 +28,7 @@ interface MitaComponent {
     fun inject(loginActivity: LoginActivity)
     fun inject(assignActivity: AssignActivity)
     fun inject(pacsActivity: PacsActivity)
+    fun inject(patientInfoFragment: PatientInfoFragment)
     fun inject(treatmentActivity: TreatmentActivity)
     fun inject(nursingActivity: NursingActivity)
     fun fragmentFactory(): FragmentFactory

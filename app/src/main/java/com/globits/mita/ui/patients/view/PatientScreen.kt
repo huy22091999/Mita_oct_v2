@@ -6,13 +6,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -29,11 +24,20 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
+import com.globits.mita.data.model.LabTest.LabTest
+import com.globits.mita.data.model.LabTest.LabTestItem
+import com.globits.mita.data.model.LabTest.LabTestItemDetait
+import com.globits.mita.data.model.LabTestXray.LabTestXRayItemDetail
+import com.globits.mita.data.model.LabTestXray.LabTestXRay
+import com.globits.mita.data.model.LabTestXray.LabTestXRayItem
+import com.globits.mita.data.model.Prescriptions.Medicine
+import com.globits.mita.data.model.Prescriptions.PresCripTion
 import com.globits.mita.ui.assign.view.SetLine
 import com.globits.mita.ui.theme.*
 import com.globits.mita.ui.treatment.view.SetUpToolbarLayout
@@ -41,22 +45,33 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Preview
 @Composable
 fun PreviewLayout() {
-    SetLayoutPatientActivity() {
+    SetLayoutPatientActivity(mutableListOf(), mutableListOf(), mutableListOf()) {
 
     }
 }
 
 @Composable
-fun SetLayoutPatientActivity(onBackStack: () -> Unit) {
+fun SetLayoutPatientActivity(
+    listLabTest: List<LabTest>,
+    listLabTestXRay: List<LabTestXRay>,
+    listPrescription: List<PresCripTion>,
+    onBackStack: () -> Unit
+) {
     MaterialTheme() {
         Column() {
             Column(modifier = Modifier.background(PRIMARY_COLOR)) {
                 SetUpToolbarLayout("Bệnh án", onBackStack)
-                SetViewPagerLayout()
+                SetViewPagerLayout(
+                    listLabTest,
+                    listLabTestXRay,
+                    listPrescription
+                )
             }
         }
 
@@ -65,14 +80,18 @@ fun SetLayoutPatientActivity(onBackStack: () -> Unit) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun SetViewPagerLayout() {
+fun SetViewPagerLayout(
+    listLabTest: List<LabTest>,
+    listLabTestXRay: List<LabTestXRay>,
+    listPrescription: List<PresCripTion>
+) {
     val tabData = listOf(
         "Xét nghiệm", "CĐHA", "Thuốc"
     )
     val pagerState = rememberPagerState(
         pageCount = tabData.size,
         initialOffscreenLimit = 3,
-        infiniteLoop = true,
+        infiniteLoop = false,
         initialPage = 0,
     )
     val tabIndex = pagerState.currentPage
@@ -154,15 +173,15 @@ fun SetViewPagerLayout() {
         state = pagerState, modifier = Modifier.background(Color.White)
     ) { index ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (tabData[index] == tabData[0]) {
-                SetPatientSession0()
-            } else if (tabData[index] == tabData[1]) {
-                SetPatientSession1()
-            } else {
-                SetPatientSession2()
+            when (tabData[index]) {
+                tabData[0] -> SetPatientSession0(listLabTest)
+                tabData[1] -> SetPatientSession1(listLabTestXRay)
+                tabData[2] -> SetPatientSession2(listPrescription)
             }
         }
     }
@@ -190,58 +209,71 @@ fun Modifier.customTabIndicatorOffset(
 }
 
 @Composable
-fun SetPatientSession0() {
-    val specials = remember {
-        mutableStateListOf<String>(
-            "Chụp Xquang số hóa 1 film",
-            "Chụp Xquang số hóa 1 film",
-        )
-    }
-    LazyColumn {
-        items(specials) {
-            SetItemPatient {
-                ContentLabTest()
-            }
-        }
+fun SetPatientSession0(listLabTest: List<LabTest>) {
+    listLabTest.forEach { item ->
+        SetItemPatient(
+            item.dateSpecified,
+            item.heathOrganization,
+            item.doctorSpecified,
+            content = {
+                item.labTestItems?.forEach { item ->
+                    ContentLabTest(item)
+                }
+            })
     }
 }
 
+
 @Composable
-fun SetPatientSession1() {
-    val specials = remember {
-        mutableStateListOf<String>(
-            "Chụp Xquang số hóa 1 film",
-            "Chụp Xquang số hóa 1 film",
-        )
-    }
-    LazyColumn {
-        items(specials) {
-            SetItemPatient {
-                ContentCDHA()
-            }
-        }
+fun SetPatientSession1(listLabTestXRay: List<LabTestXRay>) {
+
+    listLabTestXRay.forEach { item ->
+
+        SetItemPatient(
+            item.dateSpecified,
+            item.heathOrganization,
+            item.doctorSpecified,
+            content = {
+                item.labTestXRayItem?.forEach {
+                    ContentCDHA(it)
+                }
+            })
+
     }
 }
 
+
 @Composable
-fun SetPatientSession2() {
-    val specials = remember {
-        mutableStateListOf<String>(
-            "Chụp Xquang số hóa 1 film",
-            "Chụp Xquang số hóa 1 film",
-        )
+fun SetPatientSession2(listPrescription: List<PresCripTion>) {
+
+    listPrescription.forEach { item ->
+
+        SetItemPatient(
+            item.dateSpecified,
+            item.heathOrganization,
+            item.doctorSpecified,
+            content = {
+
+                //
+                item.medicines?.forEach {
+                    ContentMedicine(it)
+                }
+            })
     }
-    LazyColumn {
-        items(specials) {
-            SetItemPatient {
-                ContentMedicine()
-            }
-        }
-    }
+
 }
 
 @Composable
-fun SetItemPatient(content: @Composable () -> Unit) {
+fun SetItemPatient(
+    dateSpecified: Date?,
+    heathOrigination: String?,
+    doctorSpecified: String?,
+    content: @Composable () -> Unit
+) {
+
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+    val formattedDate: String = dateFormat.format(dateSpecified).toString()
+
     Card(
         modifier = Modifier.padding(top = 16.dp, bottom = 4.dp, start = 20.dp, end = 20.dp),
         border = BorderStroke(color = PATIENT_BACKGROUND, width = 1.dp),
@@ -254,7 +286,7 @@ fun SetItemPatient(content: @Composable () -> Unit) {
                     .background(PATIENT_BACKGROUND)
             ) {
                 Text(
-                    text = "Ngày chỉ định: 01/10/2022", fontSize = 16.sp,
+                    text = "Ngày chỉ định: ${formattedDate}", fontSize = 16.sp,
                     style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_semi_bold))),
                     modifier = Modifier
                         .padding(
@@ -272,11 +304,11 @@ fun SetItemPatient(content: @Composable () -> Unit) {
                 ) {
                     Text(
                         text = "Khoa/Phòng chỉ định",
-                        style = styleText1
+                        style = styleText4
                     )
                     Text(
                         text = "Người chỉ định",
-                        style = styleText1
+                        style = styleText4
                     )
                 }
                 Row(
@@ -286,12 +318,12 @@ fun SetItemPatient(content: @Composable () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Khoa Nội tim mạch Lão khoa",
+                        text = heathOrigination ?: "Không có dữ liệu",
                         style = styleText2
                     )
                     Text(
-                        text = "BS.Phạm Thị Hiền",
-                        style = styleText1
+                        text = doctorSpecified ?: "Không có dữ liệu",
+                        style = styleText2
                     )
                 }
 
@@ -325,7 +357,7 @@ fun SetItemPatient(content: @Composable () -> Unit) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Thu gon",
+                                text = "Thu gọn",
                                 style = styleText1,
                                 fontSize = 14.sp,
                                 modifier = Modifier.padding(end = 10.dp)
@@ -397,7 +429,7 @@ fun SetLayoutTitle(text: String) {
     ) {
         Text(
             text = text.uppercase(),
-            style = styleText1,
+            style = styleText3,
             fontSize = 14.sp,
             modifier = Modifier.padding(top = 2.dp, bottom = 2.dp)
         )
@@ -406,17 +438,22 @@ fun SetLayoutTitle(text: String) {
 
 
 @Composable
-fun ContentLabTest() {
+fun ContentLabTest(labTestItem: LabTestItem) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(top = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SetLayoutTitle("XÉT NGHIỆM HUYẾT HỌC")
-        SetLayoutResultLabTest()
+        SetLayoutTitle(labTestItem.name ?: "Không có dữ liệu hiển thị")
+        SetLayoutResultLabTest(
+            labTestItem.dateResult,
+            labTestItem.doctorResult
+        )
         Text(
             text = "Tổng phân tích tế bào máu ngoại vi",
-            style = styleText1, fontSize = 14.sp,
+            fontSize = 14.sp,
+            style = styleText4,
 
             )
         Text(
@@ -425,13 +462,20 @@ fun ContentLabTest() {
             color = PRIMARY_COLOR
         )
     }
-
-    SetItemLabTest(text = "MCH (Lượng HGB trung bình HC)")
+    labTestItem.labTestItemDetails?.forEach {
+        SetItemLabTest(it)
+    }
 
 }
 
 @Composable
-fun SetLayoutResultLabTest() {
+fun SetLayoutResultLabTest(
+    dateResult: Date?,
+    doctorResult: String?
+) {
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+    val formattedDate: String = dateFormat.format(dateResult).toString()
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -441,11 +485,11 @@ fun SetLayoutResultLabTest() {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 2.dp),
             text = "Ngày trả KQ",
-            style = styleText1
+            style = styleText4
         )
         Text(
             text = "Người trả KQ",
-            style = styleText1
+            style = styleText4
         )
     }
     Row(
@@ -455,36 +499,39 @@ fun SetLayoutResultLabTest() {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "01/10/2022",
+            text = formattedDate,
             style = styleText2
         )
         Text(
-            text = "BS.Phạm Thị Hiền",
+            text = doctorResult ?: "Không có dữ liệu hiển thị",
             style = styleText2
         )
     }
 }
 
 @Composable
-fun ContentCDHA() {
-    SetLayoutTitle(text = "CHụp X-quang")
-    SetLayoutResultLabTest()
-    SetItemCDHD("Chụp Xquang cột sống thắt lưng thẳng nghiêng")
+fun ContentCDHA(labTestXRayItem: LabTestXRayItem) {
 
-    SetLayoutTitle(text = "Siêu âm")
-    SetLayoutResultLabTest()
-    SetItemCDHD("Chụp Xquang cột sống thắt lưng thẳng nghiêng")
+    SetLayoutTitle(text = labTestXRayItem.name?: "Không có dữ liệu hiển thị")
+    SetLayoutResultLabTest(
+        labTestXRayItem.dateResult,
+        labTestXRayItem.doctorResult
+    )
+    labTestXRayItem.labTestXRayItemDetails?.forEach {
+        SetItemCDHD(it)
+    }
+
 }
 
 @Composable
-fun ContentMedicine() {
-    SetItemMedicine("Acetyl leucin(Vintanil 1000) 100mg/ml x 10ml")
+fun ContentMedicine(medicine: Medicine) {
+    SetItemMedicine(medicine)
 }
 
 @Composable
-fun SetItemMedicine(text: String) {
+fun SetItemMedicine(medicine: Medicine) {
     Card(
-        modifier = Modifier.padding(top = 12.dp),
+        modifier = Modifier.padding(bottom = 12.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp
     ) {
@@ -495,7 +542,8 @@ fun SetItemMedicine(text: String) {
                 .padding(16.dp)
         ) {
             Text(
-                text = text,
+                text = medicine.name?:"Không có dữ liệu hiển thị",
+                fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
                 fontStyle = FontStyle(R.font.nunito_sans_semi_bold)
             )
@@ -506,12 +554,12 @@ fun SetItemMedicine(text: String) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Kết quả",
-                    style = styleText1
+                    text = "Lĩnh",
+                    style = styleText4
                 )
                 Text(
-                    text = "Giá trị tham chiếu",
-                    style = styleText1
+                    text = "Đường dùng",
+                    style = styleText4
                 )
             }
             Row(
@@ -521,21 +569,21 @@ fun SetItemMedicine(text: String) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "134 g/l",
+                    text =  medicine.amount.toString(),
                     style = styleText2,
                 )
                 Text(
-                    text = "80 - 120",
+                    text = medicine.howUse?:"",
                     style = styleText2
                 )
             }
             Text(
                 modifier = Modifier.padding(top = 4.dp, bottom = 2.dp),
-                text = "Kết quả",
-                style = styleText1
+                text = "HDSD",
+                style = styleText4
             )
             Text(
-                text = "Giá trị tham chiếu",
+                text = medicine.userManual?:"",
                 style = styleText2
             )
         }
@@ -543,7 +591,7 @@ fun SetItemMedicine(text: String) {
 }
 
 @Composable
-fun SetItemLabTest(text: String) {
+fun SetItemLabTest(labTestItemDetait: LabTestItemDetait) {
     Card(
         modifier = Modifier.padding(top = 12.dp),
         shape = RoundedCornerShape(12.dp),
@@ -556,7 +604,8 @@ fun SetItemLabTest(text: String) {
                 .padding(16.dp)
         ) {
             Text(
-                text = text,
+                text = labTestItemDetait.labTestItemDetailTemplate?.name
+                    ?: "Không có  dữ liệu hiển thị",
                 fontSize = 16.sp,
                 fontStyle = FontStyle(R.font.nunito_sans_semi_bold)
             )
@@ -568,11 +617,11 @@ fun SetItemLabTest(text: String) {
             ) {
                 Text(
                     text = "Kết quả",
-                    style = styleText1
+                    style = styleText4
                 )
                 Text(
                     text = "Giá trị tham chiếu",
-                    style = styleText1
+                    style = styleText4
                 )
             }
             Row(
@@ -582,11 +631,13 @@ fun SetItemLabTest(text: String) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "134 g/l",
+                    text = "${labTestItemDetait.resulNumber} g/l",
+                    fontWeight = FontWeight.Bold,
                     style = styleText2,
                 )
                 Text(
-                    text = "80 - 120",
+                    text = "${labTestItemDetait.labTestItemDetailTemplate?.referenceNumberMin} - ${labTestItemDetait.labTestItemDetailTemplate?.referenceNumberMax}",
+                    fontWeight = FontWeight.Bold,
                     style = styleText2
                 )
             }
@@ -597,9 +648,9 @@ fun SetItemLabTest(text: String) {
 }
 
 @Composable
-fun SetItemCDHD(text: String) {
+fun SetItemCDHD(labTestXRayItemDetail: LabTestXRayItemDetail) {
     Card(
-        modifier = Modifier.padding(top = 12.dp),
+        modifier = Modifier.padding(bottom = 12.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp
     ) {
@@ -610,17 +661,19 @@ fun SetItemCDHD(text: String) {
                 .padding(16.dp)
         ) {
             Text(
-                text = text,
+                text = labTestXRayItemDetail.name?:"Không có dữ liệu hiển thị",
+                color = TEXT_COLOR4,
                 fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
                 fontStyle = FontStyle(R.font.nunito_sans_semi_bold)
             )
             Text(
                 modifier = Modifier.padding(top = 4.dp, bottom = 2.dp),
-                text = "Kết quả",
-                style = styleText1
+                text = "Kết luận",
+                style = styleText4
             )
             Text(
-                text = "Giá trị tham chiếu",
+                text = labTestXRayItemDetail.conclusion?:"Không có dữ liệu hiện thị ",
                 style = styleText2
             )
         }

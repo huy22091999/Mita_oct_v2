@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 data class LabTestItemDetait(
 
     @SerializedName("id")
-    val id: Int? = null,
+    val id: Long? = null,
 
     @SerializedName("labTestItemDetailTemplate")
-    val labTestItemDetailTemplate: List<LabTestItemDetailTemplate>? = null,
+    val labTestItemDetailTemplate: LabTestItemDetailTemplate? = null,
 
-    @SerializedName("result_number")
-    val result_number: Float? = null,
+    @SerializedName("resulNumber")
+    val resulNumber: Float? = null,
 
 
 ) {

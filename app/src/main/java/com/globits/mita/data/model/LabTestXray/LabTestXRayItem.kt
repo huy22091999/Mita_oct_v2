@@ -6,7 +6,7 @@ import java.util.*
 data class LabTestXRayItem(
 
     @SerializedName("id")
-    val id: Int? = null,
+    val id: Long? = null,
 
     @SerializedName("name")
     val name: String? = null,
@@ -18,8 +18,8 @@ data class LabTestXRayItem(
     val doctorResult: String? = null,
 
     @SerializedName("labTestXRayItemDetails")
-    val labTestXRayItemDetails: List<LabTestItemXRayItemDetail>? = null,
+    val labTestXRayItemDetails: List<LabTestXRayItemDetail>? = null,
 
 
-) {
+    ) {
 }
