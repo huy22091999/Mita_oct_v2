@@ -5,6 +5,7 @@ import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
@@ -29,6 +30,9 @@ class NursingFragment : MitaBaseFragment() {
 
     @Composable
     override fun SetLayout() {
+
+        val listPatient = viewModel.getPatient.collectAsLazyPagingItems()
+
         SetLayoutListPatientFragment(
             onClickListener = {
                 (activity as NursingActivity).addFragmentInfoPatient()
@@ -37,13 +41,11 @@ class NursingFragment : MitaBaseFragment() {
             onBackStack = { (activity as NursingActivity).finish() },
             getPatient = {
                 viewModel.handle(
-                    NursingViewAction.GetPatients(
-                        PatientFilter("", 1, 10, it)
-                    )
+                    NursingViewAction.GetPatients(it)
                 )
                 valueState.value = if (it == 0) "Xem tất cả" else "Đang điều trị"
             },
-            listUser,
+            listPatient,
             valueState
         )
     }

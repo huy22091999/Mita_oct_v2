@@ -6,4 +6,5 @@ data class LabTestAssign(
     val id: Long? = null,
     val patient: Patient? = null,
     val labTestAssignTemplate: LabTestAssignTemplate? = null
+
 )

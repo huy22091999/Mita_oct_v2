@@ -5,6 +5,7 @@ import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
@@ -22,11 +23,12 @@ class AssignFragment : MitaBaseFragment() {
 
     var valueState = mutableStateOf("Đang điều trị")
 
-    var _listUser = mutableStateOf<List<Patient>>(mutableListOf())
-    private val listUser: State<List<Patient>> = _listUser
+
 
     @Composable
     override fun SetLayout() {
+
+        val listPatient = viewModel.getPatient.collectAsLazyPagingItems()
 
         SetLayoutListPatientFragmentAssign(onClickListener = {
             viewModel.handle(AssignViewAction.SetPatientDetail(it))
@@ -34,9 +36,9 @@ class AssignFragment : MitaBaseFragment() {
 
         }, onBackStack = {
             (activity as AssignActivity).finish()
-        }, listUser = listUser,
+        }, listUser = listPatient,
             getPatient = {
-                viewModel.handle(AssignViewAction.GetPatients(PatientFilter("", 1, 10, it)))
+                viewModel.handle(AssignViewAction.GetPatients(it))
                 valueState.value = if (it == 0) "Xem tất cả" else "Đang điều trị"
             },
             valueState = valueState
@@ -51,26 +53,8 @@ class AssignFragment : MitaBaseFragment() {
     }
 
     override fun invalidate() = withState(viewModel) {
-        updateState(it)
+
     }
 
-    private fun updateState(it: AssignViewState) {
-        when (it.asyncPatients) {
-            is Success -> {
-                it.asyncPatients.invoke()?.let {
-                    if (it != null) {
-                        //_listUser.value=it
-                        _listUser.value = it.content!!
-                    }
-                }
-
-            }
-            is Fail -> {
-                requireActivity().snackbar("Đã xảy ra lỗi xin vui lòng thử lại.")
-            }
-            else -> {}
-
-        }
-    }
 
 }

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class Page<T>(
 
     @SerializedName("content")
-    val content: List<T>? = ArrayList(),
+    val content: List<T> = ArrayList(),
 
     @SerializedName("totalPages")
     val totalPages: Int? = null,

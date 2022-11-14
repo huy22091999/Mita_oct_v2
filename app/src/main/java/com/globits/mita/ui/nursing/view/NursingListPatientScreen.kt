@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import com.globits.mita.R
 import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.assign.view.SetLayoutPatientInfoItem
@@ -132,16 +133,21 @@ fun SetLayoutRadioButton(title: String, valueState: String, onClick: (String) ->
 }
 
 @Composable
-fun SetBodyListPatient(onClickListener: (Patient) -> Unit,listUser: State<List<Patient>>) {
+fun SetBodyListPatient(onClickListener: (Patient) -> Unit, items: LazyPagingItems<Patient>) {
 
-
-    LazyColumn(contentPadding = PaddingValues(bottom = 16.dp), content = {
-        items(listUser.value) { item ->
-            SetLayoutItemPatient(patient = item, Modifier.clickable {
-                onClickListener(item)
-            })
+    LazyColumn(
+        contentPadding = PaddingValues(bottom = 16.dp)
+    ) {
+        items(
+            items = items,
+        ) {patient ->
+            patient?.let { SetLayoutItemPatient(patient = patient, Modifier.clickable {
+                    onClickListener(patient)
+                }) }
         }
-    })
+    }
+
+
 }
 
 @Composable

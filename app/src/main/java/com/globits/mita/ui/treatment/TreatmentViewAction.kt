@@ -11,5 +11,5 @@ sealed class TreatmentViewAction : MitaViewModelAction {
 
     object GetUsers : TreatmentViewAction()
     data class SetPatientDetail(var patient: Patient): TreatmentViewAction()
-    data class GetPatients(var patientFilter: PatientFilter) : TreatmentViewAction()
+    data class GetPatients(var status :Int) : TreatmentViewAction()
 }

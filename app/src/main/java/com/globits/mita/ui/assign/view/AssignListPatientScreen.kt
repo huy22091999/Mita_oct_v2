@@ -25,9 +25,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import com.globits.mita.R
 import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.nursing.view.SetHeaderListPatient
+import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
 import com.globits.mita.ui.nursing.view.SetUpToolbarLayoutLight
 import com.globits.mita.ui.theme.*
 import java.util.*
@@ -37,29 +40,20 @@ import java.util.Calendar.getInstance
 @Composable
 fun DefaultListPatient() {
 
-    var listUser: MutableState<List<Patient>> = remember {
-        mutableStateOf<List<Patient>>(
-            mutableListOf(
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy")
-            )
-        )
-    }
-    SetLayoutListPatientFragmentAssign(onClickListener = {
-
-    }, onBackStack = {
-
-    }, listUser = listUser, getPatient = {}, valueState = remember {
-        mutableStateOf("Đang điều trị")
-    }
-    )
+//    var listUser: LazyPagingItems<Patient>
+//    SetLayoutListPatientFragmentAssign(onClickListener = {
+//
+//    }, onBackStack = {
+//
+//    }, listUser = listUser, getPatient = {}, valueState = remember {
+//        mutableStateOf("Đang điều trị")
+//    }
+//    )
 }
 
 @Composable
 fun SetLayoutListPatientFragmentAssign(
-    listUser: State<List<Patient>>?,
+    listUser: LazyPagingItems<Patient>,
     onClickListener: (Patient) -> Unit,
     onBackStack: () -> Unit,
     getPatient: (filter: Int) -> Unit,
@@ -88,15 +82,17 @@ fun SetLayoutListPatientFragmentAssign(
 
 @Composable
 fun SetBodyListPatientAssign(
-    listUser: State<List<Patient>>,
+    listUser: LazyPagingItems<Patient>,
     onClickListener: (Patient) -> Unit
 ) {
 
+
     LazyColumn(content = {
-        items(listUser.value) { item ->
-            SetLayoutItemPatientAssign(patient = item, Modifier.clickable {
-                onClickListener(item)
-            })
+        items( items = listUser)
+        { patient ->
+            patient?.let { SetLayoutItemPatient(patient = patient, Modifier.clickable {
+                onClickListener(patient)
+            }) }
         }
     })
 }

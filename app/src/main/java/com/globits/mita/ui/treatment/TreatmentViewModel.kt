@@ -1,5 +1,9 @@
 package com.globits.mita.ui.treatment
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.airbnb.mvrx.*
 import com.globits.mita.core.MitaViewModel
 import com.globits.mita.data.model.Patient
@@ -9,6 +13,8 @@ import com.globits.mita.ui.pacs.PacsViewAction
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 class TreatmentViewModel @AssistedInject constructor(
@@ -16,13 +22,19 @@ class TreatmentViewModel @AssistedInject constructor(
     val repository: TestRepository
 ) :
     MitaViewModel<TreatmentViewState, TreatmentViewAction, TreatmentViewEvent>(state) {
+
+    private val _getPatient = MutableStateFlow<PagingData<Patient>>(PagingData.empty())
+    val getPatient = _getPatient
+
+
+
     init {
-        getPatients(PatientFilter("",1,10,1))
+        getPatient(1)
     }
 
     override fun handle(action: TreatmentViewAction) {
         when (action) {
-            is TreatmentViewAction.GetPatients -> getPatients(action.patientFilter)
+            is TreatmentViewAction.GetPatients -> getPatient(action.status)
             is TreatmentViewAction.SetPatientDetail -> setPatientDetail(action.patient)
             else -> {}
         }
@@ -32,16 +44,15 @@ class TreatmentViewModel @AssistedInject constructor(
         setState { copy(patient=patient)}
     }
 
-    private fun getPatients(patientFilter: PatientFilter) {
-        setState {
-            copy(asyncPatients= Loading())
-        }
-        repository.getPatient(patientFilter).execute {
-            copy(asyncPatients = it)
+
+    fun getPatient(status :Int) {
+        viewModelScope.launch {
+            Log.d("AAA","viewModelScope")
+            repository.getPatient(status).cachedIn(viewModelScope).collect {
+                _getPatient.value = it
+            }
         }
     }
-
-
 
 
     @AssistedFactory

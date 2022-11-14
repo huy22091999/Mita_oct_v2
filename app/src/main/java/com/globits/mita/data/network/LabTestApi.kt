@@ -15,10 +15,13 @@ import retrofit2.http.Path
 
 interface LabTestApi {
 
-    @GET("/lab-test-assigns/{id}")
+    @GET("lab-test-assigns/{id}")
     fun getLabTestAssign(@Path(value = "id") patientId: Long): Observable<List<LabTestAssign>>
 
-    @GET("/lab-test-assigns/template")
+    @GET("lab-test-assigns/templates")
     fun getLabTestAssignTemplate(): Observable<List<LabTestAssignTemplate>>
+
+    @POST("lab-test-assigns/{id}")
+    fun saveLabTestAssign(@Path(value = "id") patientId: Long, @Body listLabTestAssign : List<LabTestAssign>): Observable<List<LabTestAssign>>
 }
 

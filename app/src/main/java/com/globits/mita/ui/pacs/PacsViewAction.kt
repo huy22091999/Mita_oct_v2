@@ -11,6 +11,6 @@ sealed class PacsViewAction : MitaViewModelAction {
 
     object GetUsers : PacsViewAction()
     data class SetPatientDetail(var patient: Patient): PacsViewAction()
-    data class GetPatients(var patientFilter: PatientFilter) : PacsViewAction()
+    data class GetPatients(var status :Int) : PacsViewAction()
     data class SetDocument(var document: Document) : PacsViewAction()
 }

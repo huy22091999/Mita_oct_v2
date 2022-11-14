@@ -1,5 +1,9 @@
 package com.globits.mita.ui.pacs
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.airbnb.mvrx.*
 import com.globits.mita.core.MitaViewModel
 import com.globits.mita.data.model.Document
@@ -10,6 +14,8 @@ import com.globits.mita.ui.assign.AssignViewAction
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 class PacsViewModel @AssistedInject constructor(
@@ -17,13 +23,17 @@ class PacsViewModel @AssistedInject constructor(
     val repository: TestRepository
 ) :
     MitaViewModel<PacsViewState, PacsViewAction, PacsViewEvent>(state) {
+
+    private val _getPatient = MutableStateFlow<PagingData<Patient>>(PagingData.empty())
+    val getPatient = _getPatient
+
     init {
-        getPatients(PatientFilter("",1,10,1))
+        getPatients(1)
     }
 
     override fun handle(action: PacsViewAction) {
         when (action) {
-            is PacsViewAction.GetPatients -> getPatients(action.patientFilter)
+            is PacsViewAction.GetPatients -> getPatients(action.status)
             is PacsViewAction.SetPatientDetail -> setPatientDetail(action.patient)
             is PacsViewAction.SetDocument -> setDocument(action.document)
             else -> {}
@@ -40,12 +50,12 @@ class PacsViewModel @AssistedInject constructor(
         setState { copy(patient=patient)}
     }
 
-    private fun getPatients(patientFilter: PatientFilter) {
-        setState {
-            copy(asyncPatients= Loading())
-        }
-        repository.getPatient(patientFilter).execute {
-            copy(asyncPatients = it)
+    private fun getPatients(status :Int) {
+        viewModelScope.launch {
+            Log.d("AAA","viewModelScope")
+            repository.getPatient(status).cachedIn(viewModelScope).collect {
+                _getPatient.value = it
+            }
         }
     }
 

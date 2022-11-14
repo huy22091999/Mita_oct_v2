@@ -1,5 +1,9 @@
 package com.globits.mita.ui.nursing
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.airbnb.mvrx.*
 import com.globits.mita.core.MitaViewModel
 import com.globits.mita.data.model.Patient
@@ -8,6 +12,8 @@ import com.globits.mita.data.repository.TestRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 class NursingViewModel @AssistedInject constructor(
@@ -15,13 +21,19 @@ class NursingViewModel @AssistedInject constructor(
     val repository: TestRepository
 ) :
     MitaViewModel<NursingViewState, NursingViewAction, NursingViewEvent>(state) {
+
+
+    private val _getPatient = MutableStateFlow<PagingData<Patient>>(PagingData.empty())
+    val getPatient = _getPatient
+
+
     init {
-        getPatients(PatientFilter("",1,10,1))
+        getPatient(1)
     }
 
     override fun handle(action: NursingViewAction) {
         when (action) {
-            is NursingViewAction.GetPatients -> getPatients(action.patientFilter)
+            is NursingViewAction.GetPatients -> getPatient(action.status)
             is NursingViewAction.SetPatientDetail -> setPatientDetail(action.patient)
             else -> {}
         }
@@ -31,12 +43,11 @@ class NursingViewModel @AssistedInject constructor(
         setState { copy(patient=patient)}
     }
 
-    private fun getPatients(patientFilter: PatientFilter) {
-        setState {
-            copy(asyncPatients= Loading())
-        }
-        repository.getPatient(patientFilter).execute {
-            copy(asyncPatients = it)
+    fun getPatient(status :Int) {
+        viewModelScope.launch {
+            repository.getPatient(status).cachedIn(viewModelScope).collect {
+                _getPatient.value = it
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.globits.mita.data.model.Patient
 
 @Preview
@@ -25,7 +26,7 @@ fun SetLayoutListPatientFragment(
     onClickListener: (Patient) -> Unit,
     onBackStack: () -> Unit,
     getPatient: (filter :Int ) -> Unit,
-    listUser: State<List<Patient>>,
+    items: LazyPagingItems<Patient>,
     valueState : MutableState<String>
 ) {
     Column(
@@ -37,6 +38,6 @@ fun SetLayoutListPatientFragment(
         SetHeaderListPatient(valueState =valueState ) {
             getPatient(it)
         }
-        SetBodyListPatient(onClickListener,listUser)
+        SetBodyListPatient(onClickListener,items)
     }
 }

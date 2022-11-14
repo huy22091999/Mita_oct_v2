@@ -3,6 +3,7 @@ package com.globits.mita.ui.pacs
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
@@ -21,18 +22,19 @@ class PacsFragment @Inject constructor() : MitaBaseFragment() {
 
     var valueState = mutableStateOf("Đang điều trị")
 
-    var _listUser = mutableStateOf<List<Patient>>(mutableListOf())
-    private val listUser: State<List<Patient>> = _listUser
 
     @Composable
     override fun SetLayout() {
+
+        val listPatient = viewModel.getPatient.collectAsLazyPagingItems()
+
         SetLayoutListPatientFragmentAssign(onBackStack = {
             (activity as PacsActivity).finish()
         }, onClickListener = {
             viewModel.handle(PacsViewAction.SetPatientDetail(it))
             (activity as PacsActivity).addFragmentInfoPatient()
-        }, listUser = listUser, getPatient = {
-            viewModel.handle(PacsViewAction.GetPatients(PatientFilter("", 1, 10, it)))
+        }, listUser = listPatient, getPatient = {
+            viewModel.handle(PacsViewAction.GetPatients(it))
             valueState.value = if (it == 0) "Xem tất cả" else "Đang điều trị"
         },
             valueState = valueState
@@ -40,25 +42,8 @@ class PacsFragment @Inject constructor() : MitaBaseFragment() {
     }
 
     override fun invalidate() = withState(viewModel) {
-        updateState(it)
+
     }
 
-    private fun updateState(it: PacsViewState) {
-        when (it.asyncPatients) {
-            is Success -> {
-                it.asyncPatients.invoke()?.let {
-                    if (it != null) {
-                        //_listUser.value=it
-                        _listUser.value = it.content!!
-                    }
-                }
-            }
-            is Fail -> {
-                requireActivity().snackbar("Đã xảy ra lỗi xin vui lòng thử lại.")
-            }
-            else -> {}
-
-        }
-    }
 
 }
