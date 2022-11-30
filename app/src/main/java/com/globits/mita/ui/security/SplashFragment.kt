@@ -1,12 +1,13 @@
 package com.globits.mita.ui.security
 
+import android.os.Build
+import android.view.View
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,11 +25,23 @@ import ir.kaaveh.sdpcompose.ssp
 import javax.inject.Inject
 
 class SplashFragment @Inject constructor() : MitaBaseFragment() {
+
+
     @Composable
     override fun SetLayout() {
-       MaterialTheme {
-           SetSplashScreen()
-       }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            activity?.window?.statusBarColor =
+                activity?.getColor(R.color.primary_color)!!
+            activity?.getWindow()?.setNavigationBarColor(getResources().getColor(R.color.primary_color))
+            activity?.window?.decorView?.systemUiVisibility = View.ACCESSIBILITY_LIVE_REGION_ASSERTIVE
+
+
+        }
+
+        SetSplashScreen()
+
     }
 
 }
@@ -38,8 +51,11 @@ class SplashFragment @Inject constructor() : MitaBaseFragment() {
 fun DefaulPreview() {
     SetSplashScreen()
 }
+
 @Composable
-fun SetSplashScreen(){
+fun SetSplashScreen() {
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -6,7 +6,7 @@
     <style name="AppTheme.Launcher.Base" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/img_icon_splash_mita</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="colorPrimaryDark">#15171B</item>
+        <item name="colorPrimaryDark">@color/primary_color</item>
     </style>
 
     <style name="QltsInputLayoutLogin" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">

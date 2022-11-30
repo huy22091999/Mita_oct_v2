@@ -20,6 +20,9 @@
     <color name="text_color">#222222</color>
     <color name="image_tint">#5619E1</color>
 
+
+    <color name="backgroupimage">#66000000</color>
+
     //mita
     <color name="primary_color">#1C6BA4</color>
 

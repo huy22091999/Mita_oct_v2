@@ -2,6 +2,7 @@ package com.globits.mita.ui
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
@@ -23,30 +24,36 @@ import javax.inject.Inject
 
 
 class MainActivity : MitaBaseActivity<ActivityMainBinding>(), HomeViewModel.Factory {
-    private lateinit var appBarConfiguration: AppBarConfiguration
+
     val viewModel: HomeViewModel by viewModel()
 
     @Inject
     lateinit var viewModelFactory: HomeViewModel.Factory
 
-    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         (applicationContext as MitaApplication).mitaComponent.inject(this)
+
         super.onCreate(savedInstanceState)
         setContentView(views.root)
+
         val navView: BottomNavigationView = views.navView
-        navController = findNavController(R.id.navigate)
-        appBarConfiguration = AppBarConfiguration(
+
+        var navController = findNavController(R.id.navigate)
+
+        var appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home,
                 R.id.nav_note,
                 R.id.nav_notification,
                 R.id.nav_setting
-            ), null
+            )
         )
-        //setupActionBarWithNavController(navController, appBarConfiguration)
+//        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
         viewModel.subscribe(this){
             if(it.isLoading())
             {
@@ -58,18 +65,7 @@ class MainActivity : MitaBaseActivity<ActivityMainBinding>(), HomeViewModel.Fact
         }
     }
 
-    fun setupToolbar(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-    }
 
-    //    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.navigate)
-//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-//    }
     override fun getBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
     }
@@ -78,11 +74,11 @@ class MainActivity : MitaBaseActivity<ActivityMainBinding>(), HomeViewModel.Fact
         return viewModelFactory.create(initialState)
     }
 
-    fun navigateTo(fragmentId: Int) {
-        navController.navigate(fragmentId)
+    override fun onBackPressed() {
+        finishAffinity()
+        super.onBackPressed()
+
     }
-
-
 
 
 }

@@ -35,7 +35,7 @@ class RemoteDataSource() {
 
     companion object {
         private const val BASE_URL =
-            "http://192.168.0.157:8020/mita/"
+            "http://192.168.0.159:8020/mita/"
 //            "http://api.oceantech.vn/asset/"
         private const val DEFAULT_USER_AGENT = "Mita-Android"
         private const val DEFAULT_CONTENT_TYPE = "application/json"
@@ -92,9 +92,9 @@ class RemoteDataSource() {
     ): OkHttpClient {
 
         return getUnsafeOkHttpClient()
-            .writeTimeout(31, TimeUnit.SECONDS)
-            .readTimeout(31, TimeUnit.SECONDS)
-            .connectTimeout(31, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
             .cookieJar(cookieJar())
             .addNetworkInterceptor(customInterceptor())
             .also { client ->

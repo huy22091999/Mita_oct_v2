@@ -60,3 +60,10 @@ val styleText4 = TextStyle(
     fontSize = 13.sp,
     color = PRIMARY_COLOR
 )
+
+val styleText5 = TextStyle(
+    fontFamily = FontFamily(Font(R.font.nunito_sans_regular)),
+    fontWeight = FontWeight.Normal,
+    fontSize = 13.sp,
+    color = TEXT_RED
+)

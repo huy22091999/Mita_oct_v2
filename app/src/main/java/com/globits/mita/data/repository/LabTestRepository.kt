@@ -21,4 +21,7 @@ class LabTestRepository @Inject constructor(
 
     fun getLabTestAssignTemplate(): Observable<List<LabTestAssignTemplate>> =
         api.getLabTestAssignTemplate().subscribeOn(Schedulers.io())
+
+    fun saveLabTestAssign(patientId: Long, listLabTestAssign: List<LabTestAssign>): Observable<List<LabTestAssign>> =
+        api.saveLabTestAssign(patientId,listLabTestAssign).subscribeOn(Schedulers.io())
 }

@@ -104,6 +104,7 @@ fun SetUpListFeatureLayout(isNursing: Boolean, onPatientClick: () -> Unit) {
             .padding(start = 20.dp, end = 20.dp, top = 12.dp)
             .fillMaxWidth()
     ) {
+        SetUpItemFeatureLayout(title = "Tài liệu bệnh án"){}
         SetUpItemFeatureLayout(title = "Bệnh án", onPatientClick)
         SetUpItemFeatureLayout(title = "Ghi chú") {}
         if (isNursing) {

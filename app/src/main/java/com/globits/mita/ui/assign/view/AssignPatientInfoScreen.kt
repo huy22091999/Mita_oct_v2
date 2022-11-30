@@ -1,12 +1,15 @@
 package com.globits.mita.ui.assign.view
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
 import com.globits.mita.data.model.Patient
+import com.globits.mita.data.model.labtestassign.LabTestAssign
 import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
 import com.globits.mita.ui.theme.*
 import com.globits.mita.ui.treatment.view.SetLayoutDiagnostic
@@ -27,14 +31,32 @@ import com.globits.mita.utils.ExposedDropdownMenu
 import com.globits.mita.utils.formatNumber
 
 
+@SuppressLint("RememberReturnType")
 @Preview
 @Composable
 fun DefaultPreviewPatientInfoAssign() {
-    SetLayoutPatientInfoAssign(onBackStack = {}, Patient(displayName = "Nguyễn văn Huy"))
+
+//    var listLabTest: MutableState<MutableList<LabTestAssign>> = remember {
+//        mutableStateOf(mutableListOf())
+//    }
+//
+//    SetLayoutPatientInfoAssign(
+//        onBackStack = {},
+//        Patient(displayName = "Nguyễn văn Huy"),
+//        listLabTest,
+//        onClickInsert = {}
+//    ) {}
 }
 
 @Composable
-fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit, patient: Patient) {
+fun SetLayoutPatientInfoAssign(
+    onBackStack: () -> Unit,
+    patient: Patient,
+    listLabTest: SnapshotStateList<LabTestAssign>,
+    onClickInsert: () -> Unit,
+    onClickRemove: (labTestAssign: LabTestAssign) -> Unit,
+    onClickSave:()->Unit
+) {
     MaterialTheme {
         Column(
             Modifier
@@ -57,7 +79,12 @@ fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit, patient: Patient) {
                     }
                 }
                 SetLayoutDiagnostic(patient)
-                SetLayoutListAssign()
+                SetLayoutListAssign(listLabTest,
+                    onClickInsert = { onClickInsert() },
+                    onClickRemove = { onClickRemove(it) },
+                    onClickSave = {onClickSave()}
+                )
+
             }
         }
     }
@@ -65,7 +92,18 @@ fun SetLayoutPatientInfoAssign(onBackStack: () -> Unit, patient: Patient) {
 }
 
 @Composable
-fun SetLayoutListAssign() {
+fun SetLayoutListAssign(
+    listLabTest: SnapshotStateList<LabTestAssign>,
+    onClickInsert: () -> Unit,
+    onClickRemove: (labTestAssign: LabTestAssign) -> Unit,
+    onClickSave: () -> Unit
+) {
+
+    var sum: Long = 0
+    for (it in listLabTest) {
+        sum += it.labTestAssignTemplate?.price!!
+    }
+
     Column(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 20.dp)
@@ -142,28 +180,24 @@ fun SetLayoutListAssign() {
             shape = RoundedCornerShape(16.dp),
             leadingIcon = iconStart,
         )
-        val specials = remember {
-            mutableStateListOf<Special>(
-                Special(
-                    "Chụp Xquang số hóa 1 film",
-                    1000
-                ), Special(
-                    "Chụp Xquang số hóa 1 film",
-                    1000
-                )
-            )
-        }
 
         Column(Modifier.padding(top = 16.dp)) {
-            for (item in specials) {
+            for (item in listLabTest) {
+
                 SetLayoutItemSpecial(item)
+                {
+                    onClickRemove(it)
+                }
             }
         }
         Button(
-            onClick = { /*TODO*/ }, modifier = Modifier
+            onClick = {
+                onClickInsert()
+            }, modifier = Modifier
                 .padding(bottom = 40.dp)
-                .fillMaxWidth(), colors =
-            ButtonDefaults.buttonColors(BACKGROUND_BUTTON),
+                .height(48.dp)
+                .fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(BACKGROUND_BUTTON),
             shape = RoundedCornerShape(16.dp)
 
         ) {
@@ -195,7 +229,7 @@ fun SetLayoutListAssign() {
             )
 
             Text(
-                text = "${formatNumber(10000000)} VNĐ", fontSize = 16.sp,
+                text = "${formatNumber(sum.toInt())} VNĐ", fontSize = 16.sp,
                 color = TEXT_COLOR2,
                 style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_regular)))
             )
@@ -203,8 +237,9 @@ fun SetLayoutListAssign() {
         }
         Row(modifier = Modifier.padding(top = 40.dp)) {
             Button(
-                onClick = { /*TODO*/ }, modifier = Modifier
+                onClick = { onClickSave() }, modifier = Modifier
                     .padding(start = 6.dp, end = 6.dp)
+                    .height(47.dp)
                     .fillMaxWidth(.5f), colors =
                 ButtonDefaults.buttonColors(PRIMARY_COLOR),
                 shape = RoundedCornerShape(8.dp)
@@ -216,8 +251,9 @@ fun SetLayoutListAssign() {
                 )
             }
             Button(
-                onClick = { /*TODO*/ }, modifier = Modifier
+                onClick = { onClickSave() }, modifier = Modifier
                     .padding(start = 6.dp, end = 6.dp)
+                    .height(47.dp)
                     .fillMaxWidth(), colors =
                 ButtonDefaults.buttonColors(PRIMARY_COLOR),
                 shape = RoundedCornerShape(8.dp)
@@ -246,7 +282,10 @@ fun SetLine() {
 }
 
 @Composable
-fun SetLayoutItemSpecial(item: Special) {
+fun SetLayoutItemSpecial(
+    labTestAssign: LabTestAssign,
+    onClickRemove: (labTestAssign: LabTestAssign) -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(bottom = 12.dp)
@@ -255,7 +294,10 @@ fun SetLayoutItemSpecial(item: Special) {
         Icon(
             modifier = Modifier
                 .width(16.dp)
-                .height(16.dp),
+                .height(16.dp)
+                .clickable {
+                    onClickRemove(labTestAssign)
+                },
             painter =
             painterResource(id = R.drawable.img_icon_remove_item),
             contentDescription = "icon"
@@ -266,16 +308,16 @@ fun SetLayoutItemSpecial(item: Special) {
                 .fillMaxWidth()
                 .padding(start = 10.dp)
         ) {
-            item.name?.let {
+            labTestAssign.labTestAssignTemplate?.name?.let {
                 Text(
                     text = it, fontSize = 16.sp,
                     color = TEXT_COLOR1,
                     style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_regular)))
                 )
             }
-            item.price?.let {
+            labTestAssign.labTestAssignTemplate?.price?.let {
                 Text(
-                    text = formatNumber(item.price), fontSize = 16.sp,
+                    text = formatNumber(it.toInt()), fontSize = 16.sp,
                     color = TEXT_COLOR2,
                     style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_regular)))
                 )

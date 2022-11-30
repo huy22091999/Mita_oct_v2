@@ -1,4 +1,4 @@
-package com.globits.mita.data.model.LabTest
+package com.globits.mita.data.model.labtest
 
 import com.google.gson.annotations.SerializedName
 import java.util.*

@@ -1,21 +1,16 @@
 package com.globits.mita.ui.patients
 
 import android.os.Bundle
-import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import com.airbnb.mvrx.*
 import com.globits.mita.MitaApplication
 import com.globits.mita.core.MitaBaseFragment
-import com.globits.mita.data.model.LabTest.LabTest
-import com.globits.mita.data.model.LabTestXray.LabTestXRay
-import com.globits.mita.data.model.Prescriptions.PresCripTion
+import com.globits.mita.data.model.labtest.LabTest
+import com.globits.mita.data.model.labtestxray.LabTestXRay
+import com.globits.mita.data.model.prescriptions.PresCripTion
 import com.globits.mita.ui.nursing.NursingActivity
-import com.globits.mita.ui.nursing.NursingViewState
 import com.globits.mita.ui.treatment.TreatmentActivity
-import com.globits.mita.ui.treatment.TreatmentViewModel
-import com.globits.mita.ui.treatment.TreatmentViewState
 import com.globits.mita.utils.snackbar
 import javax.inject.Inject
 
@@ -42,11 +37,15 @@ class PatientInfoFragment : MitaBaseFragment(),PatientViewModel.Factory {
         viewModel.handle(PatientViewAction.GetLabTest(patientId))
         viewModel.handle(PatientViewAction.GetLabTestXRay(patientId))
         viewModel.handle(PatientViewAction.GetPrescription(patientId))
+
+
+
     }
 
 
     @Composable
     override fun SetLayout() {
+
 
         SetLayoutPatientActivity(
             listLabTest = listLabTest.value,
@@ -57,7 +56,12 @@ class PatientInfoFragment : MitaBaseFragment(),PatientViewModel.Factory {
                 (activity as NursingActivity).removeBackStack()
             } else (activity as TreatmentActivity).removeBackStack()
         }
+
+
+
     }
+
+
 
 
     override fun invalidate() = withState(viewModel) {

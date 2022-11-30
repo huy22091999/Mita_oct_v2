@@ -13,28 +13,28 @@ import com.globits.mita.ui.assign.view.SetLayoutListPatientFragmentAssign
 @Composable
 fun DefaultPreviewListPatient() {
 
-    var listUser: MutableState<List<Patient>> = remember {
-        mutableStateOf<List<Patient>>(
-            mutableListOf(
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy")
-            )
-        )
-    }
-
-    SetLayoutListPatientFragmentAssign(onBackStack = {
-
-    }, onClickListener = {
-
-    }, listUser = listUser,
-        getPatient = {
-
-        },
-        valueState = remember {
-            mutableStateOf("")
-        }
-    )
+//    var listUser: MutableState<List<Patient>> = remember {
+//        mutableStateOf<List<Patient>>(
+//            mutableListOf(
+//                Patient(displayName = "Nguyễn văn Huy"),
+//                Patient(displayName = "Nguyễn văn Huy"),
+//                Patient(displayName = "Nguyễn văn Huy"),
+//                Patient(displayName = "Nguyễn văn Huy")
+//            )
+//        )
+//    }
+//
+//    SetLayoutListPatientFragmentAssign(onBackStack = {
+//
+//    }, onClickListener = {
+//
+//    }, listUser = listUser,
+//        getPatient = {
+//
+//        },
+//        valueState = remember {
+//            mutableStateOf("")
+//        }
+//    )
 
 }

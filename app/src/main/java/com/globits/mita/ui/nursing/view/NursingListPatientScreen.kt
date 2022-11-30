@@ -1,12 +1,12 @@
 package com.globits.mita.ui.nursing.view
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,6 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import com.globits.mita.R
 import com.globits.mita.data.model.Patient
 import com.globits.mita.ui.assign.view.SetLayoutPatientInfoItem
@@ -34,8 +37,6 @@ import com.globits.mita.ui.theme.*
 fun DefaultPreviewListPatient() {
 //    SetLayoutListPatientFragment(onBackStack = {}, onClickListener = {}, getPatient = {},)
 }
-
-
 
 
 @Composable
@@ -81,7 +82,8 @@ fun SetUpToolbarLayoutLight(onBackStack: () -> Unit) {
 }
 
 @Composable
-fun SetHeaderListPatient(valueState : MutableState<String>,clickFilter:(filter:Int)->Unit
+fun SetHeaderListPatient(
+    valueState: MutableState<String>, clickFilter: (filter: Int) -> Unit
 ) {
     Column {
         SetLayoutSearch(title = "Tìm kiếm bệnh nhân") {
@@ -132,16 +134,80 @@ fun SetLayoutRadioButton(title: String, valueState: String, onClick: (String) ->
 }
 
 @Composable
-fun SetBodyListPatient(onClickListener: (Patient) -> Unit,listUser: State<List<Patient>>) {
+fun SetBodyListPatient(onClickListener: (Patient) -> Unit, items: LazyPagingItems<Patient>) {
 
+    var isLoadState by remember {
+        mutableStateOf(true)
+    }
 
-    LazyColumn(contentPadding = PaddingValues(bottom = 16.dp), content = {
-        items(listUser.value) { item ->
-            SetLayoutItemPatient(patient = item, Modifier.clickable {
-                onClickListener(item)
-            })
+    LazyColumn(
+        contentPadding = PaddingValues(bottom = 16.dp)
+    ) {
+        items(
+            items = items,
+        ) { patient ->
+            patient?.let {
+                SetLayoutItemPatient(patient = patient, Modifier.clickable {
+                    onClickListener(patient)
+                })
+            }
         }
-    })
+
+        when (items.loadState.append) {
+            is LoadState.NotLoading -> Unit
+            LoadState.Loading -> {
+                item {
+                        LoadingItem()
+                }
+            }
+
+            is LoadState.Error -> {
+
+            }
+        }
+
+
+        when (items.loadState.refresh) {
+            is LoadState.NotLoading -> Unit
+            LoadState.Loading -> {
+                item {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    )
+                    {
+                            CircularProgressIndicator(modifier = Modifier.padding(top = 100.dp))
+
+                    }
+                }
+            }
+
+            is LoadState.Error -> {
+
+            }
+        }
+
+
+    }
+}
+
+@Composable
+fun LoadingItem() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .width(48.dp)
+                .height(48.dp)
+                .padding(8.dp),
+            strokeWidth = 5.dp
+        )
+
+    }
 }
 
 @Composable
@@ -180,7 +246,7 @@ fun SetLayoutItemPatient(patient: Patient, modifier: Modifier) {
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = patient.address?:"",
+                    text = patient.address ?: "",
                     style = styleText
                 )
             }

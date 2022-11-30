@@ -2,6 +2,7 @@ package com.globits.mita.ui.home
 
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -11,6 +12,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.globits.mita.R
 import com.globits.mita.core.MitaBaseFragment
 import com.globits.mita.data.model.User
 import com.globits.mita.ui.MainActivity
@@ -28,6 +30,8 @@ class HomeFragment @Inject constructor() : MitaBaseFragment() {
 
     @Composable
     override fun SetLayout() {
+
+
         setLayoutFragment(
             requireContext(),
             onClickListNursing = {

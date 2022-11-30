@@ -2,13 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.globits.mita">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
 
     <application
         android:name="com.globits.mita.MitaApplication"
@@ -18,7 +20,9 @@
         android:roundIcon="@mipmap/mita_logo_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.mita"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        >
+
         <activity
             android:theme="@style/Theme.mita.NoActionBar"
             android:name=".ui.pacs.PacsActivity"
@@ -39,17 +43,28 @@
         <activity
             android:name=".ui.security.LoginActivity"
             android:exported="true"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/Theme.mita.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.mita.NoActionBar" />
+
+
+        <meta-data
+            android:name="design_width_in_dp"
+            android:value="360"/>
+        <meta-data
+            android:name="design_height_in_dp"
+            android:value="640"/>
+
     </application>
 
 </manifest>

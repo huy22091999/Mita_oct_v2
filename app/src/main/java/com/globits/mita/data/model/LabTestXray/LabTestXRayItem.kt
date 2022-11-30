@@ -1,4 +1,4 @@
-package com.globits.mita.data.model.LabTestXray
+package com.globits.mita.data.model.labtestxray
 
 import com.google.gson.annotations.SerializedName
 import java.util.*

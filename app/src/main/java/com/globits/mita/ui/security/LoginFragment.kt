@@ -1,8 +1,10 @@
 package com.globits.mita.ui.security
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,13 +12,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -47,16 +52,28 @@ class LoginFragment @Inject constructor() : MitaBaseFragment() {
 
     @Composable
     override fun SetLayout() {
-        MaterialTheme() {
-            LoginScreen(onClickLogin = { username, password ->
-                loginSubmit(username, password)
-            })
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
+            activity?.window?.statusBarColor =
+                activity?.getColor(R.color.white)!!
+            activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            activity?.getWindow()?.setNavigationBarColor(getResources().getColor(R.color.qlts_background_login))
+
+
         }
+
+        LoginScreen(onClickLogin = { username, password ->
+            loginSubmit(username, password)
+        })
+
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
     }
 
@@ -98,8 +115,12 @@ class LoginFragment @Inject constructor() : MitaBaseFragment() {
 
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(onClickLogin: (String, String) -> Unit) {
+
+    var keyboardController = LocalSoftwareKeyboardController.current
+
     var txtUserName by remember {
         mutableStateOf("")
     }
@@ -180,7 +201,15 @@ fun LoginScreen(onClickLogin: (String, String) -> Unit) {
                 unfocusedIndicatorColor = Color.Transparent,
                 backgroundColor = BACKGROUND_EDIT_TEXT_LOGIN
             ),
-
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.None,
+                autoCorrect = true,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone ={ keyboardController?.hide() }
+            ),
             leadingIcon = iconStart,
 
             )
@@ -216,6 +245,9 @@ fun LoginScreen(onClickLogin: (String, String) -> Unit) {
                 autoCorrect = true,
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone ={ keyboardController?.hide() }
             ),
             visualTransformation = if (isShowPassword) VisualTransformation.None else PasswordVisualTransformation()
         )

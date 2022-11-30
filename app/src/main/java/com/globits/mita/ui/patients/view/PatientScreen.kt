@@ -30,14 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.globits.mita.R
-import com.globits.mita.data.model.LabTest.LabTest
-import com.globits.mita.data.model.LabTest.LabTestItem
-import com.globits.mita.data.model.LabTest.LabTestItemDetait
-import com.globits.mita.data.model.LabTestXray.LabTestXRayItemDetail
-import com.globits.mita.data.model.LabTestXray.LabTestXRay
-import com.globits.mita.data.model.LabTestXray.LabTestXRayItem
-import com.globits.mita.data.model.Prescriptions.Medicine
-import com.globits.mita.data.model.Prescriptions.PresCripTion
+import com.globits.mita.data.model.labtest.LabTest
+import com.globits.mita.data.model.labtest.LabTestItem
+import com.globits.mita.data.model.labtest.LabTestItemDetait
+import com.globits.mita.data.model.labtestxray.LabTestXRayItemDetail
+import com.globits.mita.data.model.labtestxray.LabTestXRay
+import com.globits.mita.data.model.labtestxray.LabTestXRayItem
+import com.globits.mita.data.model.prescriptions.Medicine
+import com.globits.mita.data.model.prescriptions.PresCripTion
 import com.globits.mita.ui.assign.view.SetLine
 import com.globits.mita.ui.theme.*
 import com.globits.mita.ui.treatment.view.SetUpToolbarLayout
@@ -328,8 +328,9 @@ fun SetItemPatient(
                 }
 
                 var visible by remember {
-                    mutableStateOf(true)
+                    mutableStateOf(false)
                 }
+
                 this@Column.AnimatedVisibility(
                     visible = visible,
                     enter = fadeIn(
@@ -554,13 +555,10 @@ fun SetItemMedicine(medicine: Medicine) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Lĩnh",
+                    text = "Số lượng",
                     style = styleText4
                 )
-                Text(
-                    text = "Đường dùng",
-                    style = styleText4
-                )
+
             }
             Row(
                 modifier = Modifier
@@ -572,10 +570,7 @@ fun SetItemMedicine(medicine: Medicine) {
                     text =  medicine.amount.toString(),
                     style = styleText2,
                 )
-                Text(
-                    text = medicine.howUse?:"",
-                    style = styleText2
-                )
+
             }
             Text(
                 modifier = Modifier.padding(top = 4.dp, bottom = 2.dp),
@@ -592,6 +587,11 @@ fun SetItemMedicine(medicine: Medicine) {
 
 @Composable
 fun SetItemLabTest(labTestItemDetait: LabTestItemDetait) {
+
+    val resulNumber = labTestItemDetait.resulNumber!!.toFloat()
+    val referenceNumberMin = labTestItemDetait.labTestItemDetailTemplate?.referenceNumberMin!!.toFloat()
+    val referenceNumberMax = labTestItemDetait.labTestItemDetailTemplate?.referenceNumberMax!!.toFloat()
+
     Card(
         modifier = Modifier.padding(top = 12.dp),
         shape = RoundedCornerShape(12.dp),
@@ -606,6 +606,7 @@ fun SetItemLabTest(labTestItemDetait: LabTestItemDetait) {
             Text(
                 text = labTestItemDetait.labTestItemDetailTemplate?.name
                     ?: "Không có  dữ liệu hiển thị",
+                color = if(resulNumber < referenceNumberMin || resulNumber > referenceNumberMax) TEXT_RED else TEXT_COLOR4,
                 fontSize = 16.sp,
                 fontStyle = FontStyle(R.font.nunito_sans_semi_bold)
             )
@@ -633,12 +634,12 @@ fun SetItemLabTest(labTestItemDetait: LabTestItemDetait) {
                 Text(
                     text = "${labTestItemDetait.resulNumber} g/l",
                     fontWeight = FontWeight.Bold,
-                    style = styleText2,
+                    style = if(resulNumber < referenceNumberMin || resulNumber > referenceNumberMax) styleText5 else styleText2
                 )
                 Text(
                     text = "${labTestItemDetait.labTestItemDetailTemplate?.referenceNumberMin} - ${labTestItemDetait.labTestItemDetailTemplate?.referenceNumberMax}",
                     fontWeight = FontWeight.Bold,
-                    style = styleText2
+                    style = if(resulNumber < referenceNumberMin || resulNumber > referenceNumberMax) styleText5 else styleText2
                 )
             }
 

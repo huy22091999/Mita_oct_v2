@@ -10,102 +10,22 @@
         android:name="com.globits.mita.ui.home.HomeFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_listPatientFragment"
-            app:destination="@id/listPatientFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_nursingFragment"
-            app:destination="@id/nursingFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_assignFragment"
-            app:destination="@id/assignFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_PACSFragment"
-            app:destination="@id/PACSFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_treatmentFragment"
-            app:destination="@id/treatmentFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/listPatientFragment"
-        android:name="com.globits.mita.ui.patients.ListPatientFragment"
-        android:label="fragment_list_patient"
-        tools:layout="@layout/fragment_list_patient">
-        <action
-            android:id="@+id/action_listPatientFragment_to_patientInfoFragment"
-            app:destination="@id/patientInfoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/patientInfoFragment"
-        android:name="com.globits.mita.ui.patients.PatientInfoFragment"
-        android:label="fragment_patient_info"
-        tools:layout="@layout/fragment_patient_info" />
-    <fragment
-        android:id="@+id/assignFragment"
-        android:name="com.globits.mita.ui.assign.AssignFragment"
-        android:label="fragment_assign"
-        tools:layout="@layout/fragment_assign">
-        <action
-            android:id="@+id/action_assignFragment_to_assignInfoFragment"
-            app:destination="@id/assignInfoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/nursingFragment"
-        android:name="com.globits.mita.ui.nursing.NursingFragment"
-        android:label="fragment_nursing"
-        tools:layout="@layout/fragment_nursing">
-        <action
-            android:id="@+id/action_nursingFragment_to_patientInfoFragment"
-            app:destination="@id/patientInfoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/PACSFragment"
-        android:name="com.globits.mita.ui.pacs.PacsFragment"
-        android:label="fragment_p_a_c_s"
-        tools:layout="@layout/fragment_p_a_c_s">
-        <action
-            android:id="@+id/action_PACSFragment_to_pacsInfoFragment"
-            app:destination="@id/pacsInfoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/treatmentFragment"
-        android:name="com.globits.mita.ui.treatment.TreatmentFragment"
-        android:label="fragment_treatment"
-        tools:layout="@layout/fragment_treatment">
-        <action
-            android:id="@+id/action_treatmentFragment_to_patientInfoFragment"
-            app:destination="@id/patientInfoFragment" />
-        <action
-            android:id="@+id/action_treatmentFragment_to_treatmentFragmentInfoPatient"
-            app:destination="@id/treatmentFragmentInfoPatient" />
-    </fragment>
-    <fragment
-        android:id="@+id/pacsInfoFragment"
-        android:name="com.globits.mita.ui.pacs.PacsInfoFragment"
-        android:label="fragment_pacs_info"
-        tools:layout="@layout/fragment_pacs_info" />
-    <fragment
-        android:id="@+id/assignInfoFragment"
-        android:name="com.globits.mita.ui.assign.AssignInfoFragment"
-        android:label="fragment_assign_info"
-        tools:layout="@layout/fragment_assign_info" />
+
     <fragment
         android:id="@+id/nav_notification"
         android:name="com.globits.mita.ui.notification.NotificationFragment"
-        android:label="NotificationFragment" />
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notification"/>
     <fragment
         android:id="@+id/nav_note"
         android:name="com.globits.mita.ui.note.NoteFragment"
         android:label="fragment_note"
         tools:layout="@layout/fragment_note" />
+
     <fragment
         android:id="@+id/nav_setting"
         android:name="com.globits.mita.ui.setting.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
-    <fragment
-        android:id="@+id/treatmentFragmentInfoPatient"
-        android:name="com.globits.mita.ui.treatment.TreatmentInfoPatientFragment"
-        android:label="fragment_treatment_info_patient"
-        tools:layout="@layout/fragment_treatment_info_patient" />
 </navigation>

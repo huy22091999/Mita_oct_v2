@@ -1,14 +1,15 @@
 package com.globits.mita.ui.assign.view
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -21,13 +22,20 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import com.globits.mita.R
 import com.globits.mita.data.model.Patient
+import com.globits.mita.ui.nursing.view.LoadingItem
 import com.globits.mita.ui.nursing.view.SetHeaderListPatient
+import com.globits.mita.ui.nursing.view.SetLayoutItemPatient
 import com.globits.mita.ui.nursing.view.SetUpToolbarLayoutLight
 import com.globits.mita.ui.theme.*
 import java.util.*
@@ -37,35 +45,27 @@ import java.util.Calendar.getInstance
 @Composable
 fun DefaultListPatient() {
 
-    var listUser: MutableState<List<Patient>> = remember {
-        mutableStateOf<List<Patient>>(
-            mutableListOf(
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy"),
-                Patient(displayName = "Nguyễn văn Huy")
-            )
-        )
-    }
-    SetLayoutListPatientFragmentAssign(onClickListener = {
-
-    }, onBackStack = {
-
-    }, listUser = listUser, getPatient = {}, valueState = remember {
-        mutableStateOf("Đang điều trị")
-    }
-    )
+//    var listUser: LazyPagingItems<Patient>
+//    SetLayoutListPatientFragmentAssign(onClickListener = {
+//
+//    }, onBackStack = {
+//
+//    }, listUser = listUser, getPatient = {}, valueState = remember {
+//        mutableStateOf("Đang điều trị")
+//    }
+//    )
 }
 
 @Composable
 fun SetLayoutListPatientFragmentAssign(
-    listUser: State<List<Patient>>?,
+    listUser: LazyPagingItems<Patient>,
     onClickListener: (Patient) -> Unit,
     onBackStack: () -> Unit,
     getPatient: (filter: Int) -> Unit,
-    valueState : MutableState<String>
+    valueState: MutableState<String>
 ) {
 
+    var visible by remember { mutableStateOf(listUser == null) }
 
     Column(
         modifier = Modifier
@@ -79,7 +79,23 @@ fun SetLayoutListPatientFragmentAssign(
             getPatient(it)
         }
 
-        if (listUser != null) {
+        AnimatedVisibility(
+            visible = visible
+        ) {
+            Text(
+                "Không có dữ liệu bệnh nhân",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 30.dp),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        AnimatedVisibility(
+            visible = !visible
+        ) {
             SetBodyListPatientAssign(listUser, onClickListener)
         }
     }
@@ -88,18 +104,90 @@ fun SetLayoutListPatientFragmentAssign(
 
 @Composable
 fun SetBodyListPatientAssign(
-    listUser: State<List<Patient>>,
+    listUser: LazyPagingItems<Patient>,
     onClickListener: (Patient) -> Unit
 ) {
 
+    var isLoadState by remember {
+        mutableStateOf(true)
+    }
+
+
     LazyColumn(content = {
-        items(listUser.value) { item ->
-            SetLayoutItemPatientAssign(patient = item, Modifier.clickable {
-                onClickListener(item)
-            })
+        items(items = listUser)
+        { patient ->
+            patient?.let {
+                SetLayoutItemPatient(patient = patient, Modifier.clickable {
+                    onClickListener(patient)
+                })
+            }
+        }
+
+
+        when (listUser.loadState.append) {
+            is LoadState.NotLoading -> Unit
+            LoadState.Loading -> {
+                item {
+                    AnimatedVisibility(visible = isLoadState) {
+                        LoadingItem()
+                    }
+                }
+            }
+
+            is LoadState.Error -> {
+                isLoadState = !isLoadState
+            }
+        }
+
+
+        when (listUser.loadState.refresh) {
+            is LoadState.NotLoading -> Unit
+            LoadState.Loading -> {
+                item {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    )
+                    {
+                        AnimatedVisibility(visible = isLoadState) {
+                            CircularProgressIndicator(modifier = Modifier.padding(top = 100.dp))
+                        }
+
+                    }
+                }
+            }
+
+            is LoadState.Error -> {
+                isLoadState = !isLoadState
+            }
         }
     })
 }
+
+
+
+
+
+@Composable
+fun LoadingItem() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .width(48.dp)
+                .height(48.dp)
+                .padding(8.dp),
+            strokeWidth = 5.dp
+        )
+
+    }
+}
+
+
 
 @Composable
 fun SetLayoutItemPatientAssign(patient: Patient, modifier: Modifier) {
@@ -207,7 +295,7 @@ fun SetLayoutPatientInfoItem(patient: Patient) {
                 Text(
                     text = "Sinh năm ${cal.get(Calendar.YEAR)} | ${
                         getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR)
-                    } tuổi | ${if(patient.gender == "M") "Nam" else "Nữ"}",
+                    } tuổi | ${if (patient.gender == "M") "Nam" else "Nữ"}",
 
 //                    text = "Sinh năm 200",
                     modifier = Modifier.constrainAs(dob) {
@@ -221,10 +309,13 @@ fun SetLayoutPatientInfoItem(patient: Patient) {
                     text = buildAnnotatedString {
                         append(if (patient.status == 1) "\u2022 Đang điều trị" else "\u2022 Kết thúc điều trị")
 
-                    }, modifier = Modifier.constrainAs(status) {
+                    },
+                    modifier = Modifier.constrainAs(status) {
                         start.linkTo(dob.end)
                         end.linkTo(parent.end)
-                    }, fontSize = 10.sp, color = if(patient.status == 1 ) TEXT_STATUS else ICON_LOCATION,
+                    },
+                    fontSize = 10.sp,
+                    color = if (patient.status == 1) TEXT_STATUS else ICON_LOCATION,
                     style = TextStyle(fontFamily = FontFamily(Font(R.font.nunito_sans_regular)))
                 )
             }
@@ -272,7 +363,7 @@ fun SetLayoutPatientInfoItem(patient: Patient) {
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text ="Đối tượng: ${if (patient.objectType == 0) "BHYT" else "Viện phí"}" ,
+                    text = "Đối tượng: ${if (patient.objectType == 0) "BHYT" else "Viện phí"}",
                     style = styleText
                 )
             }

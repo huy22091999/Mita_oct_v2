@@ -3,6 +3,7 @@ package com.globits.mita.di
 import android.content.Context
 import com.globits.mita.data.network.*
 import com.globits.mita.data.repository.AuthRepository
+import com.globits.mita.data.repository.LabTestRepository
 import com.globits.mita.data.repository.TestRepository
 import com.globits.mita.data.repository.UserRepository
 import dagger.Module
@@ -10,6 +11,15 @@ import dagger.Provides
 
 @Module
 object NetWorkModule {
+
+    @Provides
+    fun labTestRepository(labTestApi : LabTestApi): LabTestRepository = LabTestRepository(labTestApi)
+
+    @Provides
+    fun providerLabTestApi(
+        remoteDataSource: RemoteDataSource,
+        context: Context
+    ) = remoteDataSource.buildApi(LabTestApi::class.java, context)
 
     @Provides
     fun providerRemoteDateSource(): RemoteDataSource = RemoteDataSource()

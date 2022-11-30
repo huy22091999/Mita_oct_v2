@@ -12,9 +12,14 @@ import com.globits.mita.data.model.labtestassign.LabTestAssignTemplate
 data class AssignViewState(
     val asyncUsers: Async<List<Patient>> = Uninitialized,
     val asyncPatients: Async<Page<Patient>> = Uninitialized,
-    val asyncLabTestAssign:Async<List<LabTestAssign>> = Uninitialized,
-    val asyncLabTestAssignTemplate:Async<List<LabTestAssignTemplate>> = Uninitialized,
+    val asyncLabTestAssign: Async<List<LabTestAssign>> = Uninitialized,
+    val asyncSaveLabTestAssign: Async<List<LabTestAssign>> = Uninitialized,
+    val asyncLabTestAssignTemplate: Async<List<LabTestAssignTemplate>> = Uninitialized,
     var patient: Patient? = null
 ) : MvRxState {
-    fun isLoading() = asyncUsers is Loading || asyncPatients is Loading
+    fun isLoading() = asyncUsers is Loading ||
+            asyncPatients is Loading ||
+            asyncLabTestAssign is Loading ||
+            asyncSaveLabTestAssign is Loading ||
+            asyncLabTestAssignTemplate is Loading
 }

@@ -1,12 +1,18 @@
 package com.globits.mita
 
 import android.app.Application
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import androidx.appcompat.app.AppCompatDelegate
 import com.globits.mita.di.DaggerMitaComponent
 import com.globits.mita.di.MitaComponent
+import com.globits.mita.utils.UpdateReceiver
 import timber.log.Timber
 
 
 open class MitaApplication : Application() {
+
+
     val mitaComponent: MitaComponent by lazy {
         initializeComponent()
     }
@@ -19,11 +25,26 @@ open class MitaApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // vo hieu hoa nightthemes
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         mitaComponent.inject(this)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+
+
+        //boartcat reciver
+        val filter = IntentFilter()
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE")
+        registerReceiver(UpdateReceiver(true), filter)
+
+//        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+//        registerReceiver(UpdateReceiver(), intentFilter)
     }
+
+
+
 }
+
 

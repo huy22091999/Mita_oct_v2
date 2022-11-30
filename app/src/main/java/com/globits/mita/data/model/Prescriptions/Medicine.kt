@@ -1,4 +1,4 @@
-package com.globits.mita.data.model.Prescriptions
+package com.globits.mita.data.model.prescriptions
 
 import com.google.gson.annotations.SerializedName
 
